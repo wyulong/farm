@@ -34,8 +34,8 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry){
         //全局拦截器，初始化请求参数
         registry.addInterceptor(contextInterceptor).addPathPatterns("/**");
-
-        registry.addInterceptor(adminInterceptor).addPathPatterns("/user/*");
+        //管理员请求拦截
+        registry.addInterceptor(adminInterceptor).addPathPatterns("/admin/*");
         // TODO 各个角色拦截器
     }
 

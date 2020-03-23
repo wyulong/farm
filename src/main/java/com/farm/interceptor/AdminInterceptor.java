@@ -16,7 +16,7 @@ public class AdminInterceptor extends AbstractInterceptor{
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        // 是否免校验
+        // 是否免登录校验
         if ( super.isOpenApi(handler) ) {
             return true;
         }
