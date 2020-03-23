@@ -3,16 +3,19 @@ package com.farm.controller;
 import com.farm.annotation.OpenApi;
 import com.farm.dto.Result;
 import com.farm.interceptor.SessionContext;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/** 通用接口
+/**  通用接口，登录、评论、收藏、搜索功能
+ *  不做权限拦截
  * @Author xhua
  * @Date 2020/3/23 14:39
  **/
 @RestController
 @RequestMapping("/common")
+@Slf4j
 public class CommonController {
 
     /**
