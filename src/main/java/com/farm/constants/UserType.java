@@ -12,7 +12,8 @@ import lombok.NoArgsConstructor;
 public enum UserType {
 
     ADMIN(1,"超级管理员"),
-    MANAGE(2,"管理员");
+    MANAGE(2,"技术人员"),
+    GENERAL_USER(3,"普通用户");
 
     private int code;
     private String desc;

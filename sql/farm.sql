@@ -11,7 +11,7 @@
  Target Server Version : 50720
  File Encoding         : 65001
 
- Date: 23/03/2020 17:25:10
+ Date: 23/03/2020 18:15:32
 */
 
 SET NAMES utf8mb4;
@@ -109,7 +109,14 @@ CREATE TABLE `role`  (
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of role
+-- ----------------------------
+INSERT INTO `role` VALUES (1, '管理员', '2020-03-23 18:11:08', '2020-03-23 18:11:08');
+INSERT INTO `role` VALUES (2, '技术人员', '2020-03-23 18:11:15', '2020-03-23 18:11:15');
+INSERT INTO `role` VALUES (3, '普通用户', '2020-03-23 18:11:22', '2020-03-23 18:11:22');
 
 -- ----------------------------
 -- Table structure for user
@@ -117,14 +124,21 @@ CREATE TABLE `role`  (
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户姓名',
-  `phone` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '手机号',
-  `password` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '密码',
+  `name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户姓名',
+  `phone` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '手机号',
+  `password` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '密码',
+  `card_id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '身份证（忘记密码时使用）',
+  `type` tinyint(4) NOT NULL DEFAULT 3 COMMENT '用户类型',
   `token_expire_time` timestamp(0) NULL DEFAULT NULL COMMENT '会话过期时间',
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '用户创建时间',
   `update_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户信息表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户信息表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of user
+-- ----------------------------
+INSERT INTO `user` VALUES (1, '超级管理员', '13788888888', '123456', '12345678', 3, '2020-03-23 18:12:52', '2020-03-23 18:12:35', '2020-03-23 18:15:05');
 
 -- ----------------------------
 -- Table structure for user_collect
