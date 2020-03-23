@@ -11,7 +11,7 @@
  Target Server Version : 50720
  File Encoding         : 65001
 
- Date: 23/03/2020 18:15:32
+ Date: 23/03/2020 18:40:29
 */
 
 SET NAMES utf8mb4;
@@ -53,6 +53,21 @@ CREATE TABLE `article`  (
   `update_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '文章表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for business_sumup
+-- ----------------------------
+DROP TABLE IF EXISTS `business_sumup`;
+CREATE TABLE `business_sumup`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `author_id` int(11) NULL DEFAULT NULL COMMENT '作者id',
+  `time` timestamp(0) NULL DEFAULT NULL COMMENT '下乡时间',
+  `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '内容',
+  `status` tinyint(4) DEFAULT NULL COMMENT '状态',
+  `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `update_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '下乡总计表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for comment
