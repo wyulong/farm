@@ -34,4 +34,13 @@ public enum UserType {
         this.desc = desc;
     }
 
+    public static UserType getUserTypeByCode(int code){
+        for (UserType userType:UserType.values()){
+            if (userType.getCode() == code){
+                return userType;
+            }
+        }
+        return null;
+    }
+
 }

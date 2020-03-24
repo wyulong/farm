@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.farm.constants.ErrorResult;
+import com.farm.constants.UserType;
 import com.farm.dto.Result;
+import com.farm.dto.res.LoginInfoDTO;
 import com.farm.entity.User;
 import com.farm.mapper.UserMapper;
 import com.farm.util.MD5Util;
@@ -34,7 +36,7 @@ public class AuthService {
      * @param password
      * @return
      */
-    public Result<String> verifyPhoneAndPassword(String phone, String password){
+    public Result<LoginInfoDTO> verifyPhoneAndPassword(String phone, String password){
 
         if (!RegexUtil.regexPhone(phone)){
             return Result.error("手机号格式错误");
@@ -61,7 +63,15 @@ public class AuthService {
                 user1.setToken(token);
                 user1.setTokenExpireTime(new Date(System.currentTimeMillis() + TOKEN_EXPIRE_TIME));
                 userMapper.updateById(user1);
-                return Result.success(token);
+
+                UserType userType = UserType.getUserTypeByCode(user1.getType());
+                LoginInfoDTO loginInfoDTO = LoginInfoDTO.builder().
+                        token(token).
+                        userType(user1.getType()).
+                        roleDesc(userType == null ? "未知":userType.getDesc()).
+                        build();
+
+                return Result.success(loginInfoDTO);
             }else {
                 return Result.error("密码错误");
             }

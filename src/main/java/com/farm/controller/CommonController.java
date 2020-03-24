@@ -2,8 +2,8 @@ package com.farm.controller;
 
 import com.farm.annotation.OpenApi;
 import com.farm.dto.Result;
-import com.farm.dto.req.LoginInfoDTO;
-import com.farm.interceptor.SessionContext;
+import com.farm.dto.req.LoginParams;
+import com.farm.dto.res.LoginInfoDTO;
 import com.farm.service.AuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -26,13 +26,13 @@ public class CommonController {
 
     /**
      *  登录接口
-     * @param loginInfoDTO
+     * @param loginParams
      * @return
      */
     @PostMapping("/login")
     @OpenApi
-    public Result<String> login(@RequestBody LoginInfoDTO loginInfoDTO){
-        return authService.verifyPhoneAndPassword(loginInfoDTO.getPhone(),loginInfoDTO.getPassword());
+    public Result<LoginInfoDTO> login(@RequestBody LoginParams loginParams){
+        return authService.verifyPhoneAndPassword(loginParams.getPhone(), loginParams.getPassword());
     }
 
     /**
