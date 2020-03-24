@@ -28,7 +28,7 @@ CREATE TABLE `apply_record`  (
   `phone` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '申请人电话',
   `address` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '申请人地址',
   `amount` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '申请亩数',
-  `describe` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '申请理由',
+  `apply_reason` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '申请理由',
   `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '照片内容等，存json',
   `status` tinyint(4) NULL DEFAULT NULL COMMENT '申请状态  1审核中，2退回，3审核通过',
   `auth_id` int(11) NULL DEFAULT NULL COMMENT '审核人ID',
