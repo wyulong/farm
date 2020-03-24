@@ -21,6 +21,8 @@ public class User {
     private String name;
     private String phone;
     private String password;
+    private Integer type;
+    private String token;
     private Date tokenExpireTime;
     private Date createTime;
     private Date updateTime;

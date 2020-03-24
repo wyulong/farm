@@ -2,10 +2,13 @@ package com.farm.controller;
 
 import com.farm.annotation.OpenApi;
 import com.farm.dto.Result;
+import com.farm.dto.req.LoginInfoDTO;
 import com.farm.interceptor.SessionContext;
+import com.farm.service.AuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**  通用接口，登录、评论、收藏、搜索功能
@@ -18,20 +21,18 @@ import java.util.List;
 @Slf4j
 public class CommonController {
 
+    @Resource
+    private AuthService authService;
+
     /**
      *  登录接口
-     * @param phone
-     * @param password
+     * @param loginInfoDTO
      * @return
      */
     @PostMapping("/login")
     @OpenApi
-    public Result<String> login(@RequestParam("phone")String phone,@RequestParam("password")String password){
-        String sid = SessionContext.getRemoteSid();
-        System.out.println(sid);
-        System.out.println(phone + "--" + password);
-        //TODO 登录鉴权
-        return Result.success();
+    public Result<String> login(@RequestBody LoginInfoDTO loginInfoDTO){
+        return authService.verifyPhoneAndPassword(loginInfoDTO.getPhone(),loginInfoDTO.getPassword());
     }
 
     /**

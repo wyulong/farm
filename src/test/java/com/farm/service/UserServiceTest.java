@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.farm.Application;
 import com.farm.entity.User;
 import com.farm.util.MD5Util;
+import com.farm.util.RegexUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,14 +23,18 @@ public class UserServiceTest {
     @Resource
     private UserService userService;
 
-//    @Test
+    @Test
     public void test(){
 
         User user = userService.getUser(1);
         System.out.println(JSON.toJSONString(user));
 
-        String encryptStr = MD5Util.encrypt("test123");
+        String encryptStr = MD5Util.encrypt("123456");
         System.out.println(encryptStr);
+
+        boolean isPhone = RegexUtil.regexPhone("13786272773");
+        System.out.println(isPhone);
+
 
     }
 

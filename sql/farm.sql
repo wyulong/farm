@@ -11,7 +11,7 @@
  Target Server Version : 50720
  File Encoding         : 65001
 
- Date: 23/03/2020 18:40:29
+ Date: 24/03/2020 17:15:29
 */
 
 SET NAMES utf8mb4;
@@ -144,6 +144,7 @@ CREATE TABLE `user`  (
   `password` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '密码',
   `card_id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '身份证（忘记密码时使用）',
   `type` tinyint(4) NOT NULL DEFAULT 3 COMMENT '用户类型',
+  `token` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '会话信息',
   `token_expire_time` timestamp(0) NULL DEFAULT NULL COMMENT '会话过期时间',
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '用户创建时间',
   `update_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
@@ -153,7 +154,7 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (1, '超级管理员', '13788888888', '123456', '12345678', 3, '2020-03-23 18:12:52', '2020-03-23 18:12:35', '2020-03-23 18:15:05');
+INSERT INTO `user` VALUES (1, '超级管理员', '13786272773', 'e10adc3949ba59abbe56e057f20f883e', '12345678', 1, '186f9b23-7ba5-4a9e-b6e8-7fdbffe373a1', '2020-03-24 17:22:37', '2020-03-23 18:12:35', '2020-03-24 16:55:30');
 
 -- ----------------------------
 -- Table structure for user_collect
