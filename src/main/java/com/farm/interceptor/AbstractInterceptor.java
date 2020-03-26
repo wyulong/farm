@@ -30,19 +30,6 @@ public abstract class AbstractInterceptor implements HandlerInterceptor {
     /** 鉴权方法，由子类实现 **/
     protected abstract boolean doCheck(HttpServletRequest request, HttpServletResponse response) throws Exception;
 
-    /**
-     *  快速响应失败
-     * @param response
-     * @param error
-     * @return
-     * @throws Exception
-     */
-    protected boolean stopRequest(HttpServletResponse response, Errors error) throws Exception{
-        response.setHeader("Content-Type", "application/json;charset=UTF-8");
-        String json = objectMapper.writeValueAsString(Result.error(error));
-        response.getWriter().print(json);
-        return false;
-    }
 
     /**
      *  免登录
