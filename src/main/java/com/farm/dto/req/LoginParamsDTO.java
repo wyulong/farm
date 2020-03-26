@@ -9,7 +9,7 @@ import lombok.ToString;
  **/
 @Data
 @ToString
-public class LoginParams {
+public class LoginParamsDTO {
 
     private String phone;
     private String password;

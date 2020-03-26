@@ -2,7 +2,8 @@ package com.farm.controller;
 
 import com.farm.annotation.OpenApi;
 import com.farm.dto.Result;
-import com.farm.dto.req.LoginParams;
+import com.farm.dto.req.LoginParamsDTO;
+import com.farm.dto.req.RegisterDTO;
 import com.farm.dto.res.LoginInfoDTO;
 import com.farm.service.AuthService;
 import lombok.extern.slf4j.Slf4j;
@@ -25,14 +26,24 @@ public class CommonController {
     private AuthService authService;
 
     /**
+     *  注册接口
+     * @param registerDTO
+     * @return
+     */
+    @PostMapping("/register")
+    public Result<Boolean> register(@RequestBody RegisterDTO registerDTO){
+        return authService.register(registerDTO);
+    }
+
+    /**
      *  登录接口
-     * @param loginParams
+     * @param loginParamsDTO
      * @return
      */
     @PostMapping("/login")
     @OpenApi
-    public Result<LoginInfoDTO> login(@RequestBody LoginParams loginParams){
-        return authService.verifyPhoneAndPassword(loginParams.getPhone(), loginParams.getPassword());
+    public Result<LoginInfoDTO> login(@RequestBody LoginParamsDTO loginParamsDTO){
+        return authService.verifyPhoneAndPassword(loginParamsDTO.getPhone(), loginParamsDTO.getPassword());
     }
 
     /**

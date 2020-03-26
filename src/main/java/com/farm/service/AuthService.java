@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.farm.constants.ErrorResult;
 import com.farm.constants.UserType;
 import com.farm.dto.Result;
+import com.farm.dto.req.RegisterDTO;
 import com.farm.dto.res.LoginInfoDTO;
 import com.farm.entity.User;
 import com.farm.mapper.UserMapper;
@@ -76,6 +77,35 @@ public class AuthService {
                 return Result.error("密码错误");
             }
         }
+    }
+
+    /**
+     *  注册逻辑
+     * @param registerDTO
+     * @return
+     */
+    public Result<Boolean> register(RegisterDTO registerDTO){
+
+        if (!RegexUtil.regexPhone(registerDTO.getPhone())){
+            return Result.error("手机号格式错误");
+        }
+
+        if (!RegexUtil.validateCard(registerDTO.getCardId())){
+            return Result.error("错误的身份证号");
+        }
+
+        User user = User.builder().
+                name(registerDTO.getName()).
+                password(MD5Util.encrypt(registerDTO.getPassword())).
+                phone(registerDTO.getPhone()).
+                cardId(registerDTO.getCardId()).
+                type(UserType.GENERAL_USER.getCode()).
+                createTime(new Date()).
+                build();
+
+        int res = userMapper.insert(user);
+
+        return Result.success(res > 0);
     }
 
 }

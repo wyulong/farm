@@ -32,9 +32,11 @@ public class UserServiceTest {
         String encryptStr = MD5Util.encrypt("123456");
         System.out.println(encryptStr);
 
-        boolean isPhone = RegexUtil.regexPhone("13786272773");
+        boolean isPhone = RegexUtil.regexPhone("13785272793");
         System.out.println(isPhone);
 
+        boolean isCard = RegexUtil.validateCard("450330199307284319");
+        System.out.println(isCard);
 
     }
 
