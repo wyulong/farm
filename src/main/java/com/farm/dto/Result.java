@@ -1,6 +1,6 @@
 package com.farm.dto;
 
-import com.farm.constants.ErrorResult;
+import com.farm.constants.Errors;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Data;
@@ -29,8 +29,8 @@ public class Result implements Serializable {
         return Result.builder().code(0).msg("ok").data(null).build();
     }
 
-    public static  Result error(ErrorResult errorResult) {
-        return Result.builder().code(errorResult.getCode()).msg(errorResult.getMessage()).data(null).build();
+    public static  Result error(Errors error) {
+        return Result.builder().code(error.getCode()).msg(error.getMessage()).data(null).build();
     }
 
     public static  Result error(int code, String message) {

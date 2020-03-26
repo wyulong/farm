@@ -21,16 +21,18 @@ public class ApplyRecordService {
     private ApplyRecordMapper applyRecordMapper;
 
     /**
-     *  查询补贴记录内容
+     * 查询补贴记录内容
+     *
      * @param id
      * @return
      */
-    public Result getApplyRecord(Integer id) {
-        return Result.success(applyRecordMapper.selectById(id));
+    public ApplyRecord getApplyRecord(Integer id) {
+        return applyRecordMapper.selectById(id);
     }
 
     /**
      * 分页查询补贴
+     *
      * @param currPage
      * @param pageSize
      * @return

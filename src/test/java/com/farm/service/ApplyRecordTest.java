@@ -3,6 +3,7 @@ package com.farm.service;
 import com.alibaba.fastjson.JSON;
 import com.farm.Application;
 import com.farm.dto.Result;
+import com.farm.entity.ApplyRecord;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,9 +23,9 @@ public class ApplyRecordTest {
     private ApplyRecordService applyRecordService;
 
     @Test
-    public void test(){
-        Result<ApplyRecord> result = applyRecordService.getApplyRecord(1);
-        System.out.println(JSON.toJSONString(result.getData()));
+    public void test() {
+        ApplyRecord result = applyRecordService.getApplyRecord(1);
+        System.out.println(JSON.toJSONString(result));
 
     }
 

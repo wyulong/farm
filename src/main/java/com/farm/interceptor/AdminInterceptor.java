@@ -1,7 +1,7 @@
 package com.farm.interceptor;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.farm.constants.ErrorResult;
+import com.farm.constants.Errors;
 import com.farm.constants.UserType;
 import com.farm.entity.User;
 import com.farm.mapper.UserMapper;
@@ -41,10 +41,10 @@ public class AdminInterceptor extends AbstractInterceptor{
     @Override
     protected boolean doCheck(HttpServletRequest request, HttpServletResponse response) throws Exception{
         if (SessionContext.getRemoteSid() == null){
-            return stopRequest(response,ErrorResult.ILLEGAL_PARAMS);
+            return stopRequest(response, Errors.ILLEGAL_PARAMS);
         }else {
             if (!this.verifyToken()){
-                return stopRequest(response,ErrorResult.INVALID_TOKEN);
+                return stopRequest(response, Errors.INVALID_TOKEN);
             }
             //是否是管理员
             User query = new User();

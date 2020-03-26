@@ -23,7 +23,7 @@ public class ReturnValueConfig implements InitializingBean {
         List<HandlerMethodReturnValueHandler> list = new ArrayList<>(unmodifiableList.size());
         for (HandlerMethodReturnValueHandler returnValueHandler : unmodifiableList) {
             if (returnValueHandler instanceof RequestResponseBodyMethodProcessor) {
-                list.add(new ResultWarpReturnValueHandler(returnValueHandler));
+                list.add(new GlobalReturnValueHandler(returnValueHandler));
             } else {
                 list.add(returnValueHandler);
             }
