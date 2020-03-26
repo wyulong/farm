@@ -1,7 +1,5 @@
 package com.farm.controller;
 
-import com.farm.annotation.OpenApi;
-import com.farm.dto.Result;
 import com.farm.entity.User;
 import com.farm.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -25,8 +23,8 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/get-user")
-    public Result<User> getUser(@RequestParam("id")Integer id){
-        return Result.success(userService.getUser(id));
+    public User getUser(@RequestParam("id")Integer id){
+        return userService.getUser(id);
     }
 
 }

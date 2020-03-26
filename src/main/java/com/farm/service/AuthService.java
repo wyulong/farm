@@ -3,7 +3,6 @@ package com.farm.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.farm.constants.ErrorResult;
 import com.farm.constants.UserType;
 import com.farm.dto.Result;
 import com.farm.dto.req.RegisterDTO;
@@ -37,7 +36,7 @@ public class AuthService {
      * @param password
      * @return
      */
-    public Result<LoginInfoDTO> verifyPhoneAndPassword(String phone, String password){
+    public Result verifyPhoneAndPassword(String phone, String password){
 
         if (!RegexUtil.regexPhone(phone)){
             return Result.error("手机号格式错误");
@@ -84,7 +83,7 @@ public class AuthService {
      * @param registerDTO
      * @return
      */
-    public Result<Boolean> register(RegisterDTO registerDTO){
+    public Result register(RegisterDTO registerDTO){
 
         if (!RegexUtil.regexPhone(registerDTO.getPhone())){
             return Result.error("手机号格式错误");

@@ -13,36 +13,36 @@ import java.io.Serializable;
  **/
 @Data
 @Builder
-public class Result<T> implements Serializable {
+public class Result implements Serializable {
 
     private int code;
     private String msg;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private T data;
+    private Object data;
 
-    public static <T> Result<T> success(T data){
-        return Result.<T>builder().code(0).msg("ok").data(data).build();
+    public static  Result success(Object data){
+        return Result.builder().code(0).msg("ok").data(data).build();
     }
 
-    public static <T> Result<T> success() {
-        return Result.<T>builder().code(0).msg("OK").data(null).build();
+    public static  Result success() {
+        return Result.builder().code(0).msg("ok").data(null).build();
     }
 
-    public static <T> Result<T> error(ErrorResult errorResult) {
-        return Result.<T>builder().code(errorResult.getCode()).msg(errorResult.getMessage()).data(null).build();
+    public static  Result error(ErrorResult errorResult) {
+        return Result.builder().code(errorResult.getCode()).msg(errorResult.getMessage()).data(null).build();
     }
 
-    public static <T> Result<T> error(int code, String message) {
-        return Result.<T>builder().code(code).msg(message).data(null).build();
+    public static  Result error(int code, String message) {
+        return Result.builder().code(code).msg(message).data(null).build();
     }
 
-    public static <T> Result<T> error(String message) {
-        return Result.<T>builder().code(-1).msg(message).data(null).build();
+    public static  Result error(String message) {
+        return Result.builder().code(-1).msg(message).data(null).build();
     }
 
-    public static <T> Result<T> build(int code, String message,T data) {
-        return Result.<T>builder().code(code).msg(message).data(data).build();
+    public static  Result build(int code, String message, Object data) {
+        return Result.builder().code(code).msg(message).data(data).build();
     }
 
 }

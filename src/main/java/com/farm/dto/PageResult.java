@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @ToString
 @Builder
-public class PageResult {
+public class PageResult<A> {
 
     private Integer page;
     private Integer size;
