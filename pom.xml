@@ -116,8 +116,6 @@
         <!--</dependency>-->
     </dependencies>
 
-    </dependencies>
-    
     <repositories>
         <repository>
             <id>aliyun</id>
