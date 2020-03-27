@@ -22,6 +22,11 @@ public class AdminController {
     @Autowired
     private NoticeService noticeService;
 
+    /**
+     * 测试接口
+     *
+     * @return
+     */
     @GetMapping("/get")
     public String get() {
         return "123";
