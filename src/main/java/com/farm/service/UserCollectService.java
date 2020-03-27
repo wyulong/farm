@@ -13,4 +13,12 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface UserCollectService extends IService<UserCollect> {
 
+    /**
+     * 是否存在收藏
+     * @param userId
+     * @param articleId
+     * @return
+     */
+    boolean exists(Integer userId,Integer articleId);
+
 }

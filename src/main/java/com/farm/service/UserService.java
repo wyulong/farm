@@ -15,6 +15,6 @@ import javax.annotation.Resource;
 @Service
 public interface UserService extends IService<User> {
 
-
+    User currentUser();
 
 }

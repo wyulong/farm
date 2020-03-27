@@ -25,7 +25,7 @@ public class AdminInterceptor extends AbstractInterceptor {
     private UserMapper userMapper;
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 
         // 是否免登录校验
         if (super.isOpenApi(handler)) {
@@ -43,7 +43,7 @@ public class AdminInterceptor extends AbstractInterceptor {
      * @return
      */
     @Override
-    protected boolean doCheck(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    protected boolean doCheck(HttpServletRequest request, HttpServletResponse response) {
         if (SessionContext.getRemoteSid() == null) {
             Exceptions.throwss(Errors.ILLEGAL_PARAMS);
         }
