@@ -1,5 +1,9 @@
 package com.farm.configurations;
 
+import com.baomidou.mybatisplus.annotation.DbType;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.core.config.GlobalConfig;
+import com.baomidou.mybatisplus.extension.injector.LogicSqlInjector;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.annotation.MapperScan;
@@ -50,6 +54,22 @@ public class DbConfiguration {
     @Bean("transaction")
     public DataSourceTransactionManager transactionManager(@Qualifier("dbConfig") DataSource dataSource){
         return new DataSourceTransactionManager(dataSource);
+    }
+
+    @Bean("globalConfig")
+    public GlobalConfig globalConfig(){
+        // 全局配置文件
+        GlobalConfig globalConfig = new GlobalConfig();
+        GlobalConfig.DbConfig dbConfig = new GlobalConfig.DbConfig();
+        // 默认为自增
+        dbConfig.setIdType(IdType.AUTO);
+        // 手动指定db 的类型, 这里是mysql
+        dbConfig.setDbType(DbType.MYSQL);
+        globalConfig.setDbConfig(dbConfig);
+        // 逻辑删除注入器
+        LogicSqlInjector injector = new LogicSqlInjector();
+        globalConfig.setSqlInjector(injector);
+        return globalConfig;
     }
 
 
