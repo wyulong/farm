@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminController {
 
     @GetMapping("/get")
-    public Result<String> get(){
-        return Result.success("123");
+    public String get(){
+        return "123";
     }
 }

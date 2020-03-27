@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
  **/
 @AllArgsConstructor
 @NoArgsConstructor
-public enum ErrorResult {
+public enum Errors {
 
     SMS_VERIFY_ERROR(-1, "incorrect verification code"),
     ILLEGAL_PARAMS(400, "illegal arguments"),

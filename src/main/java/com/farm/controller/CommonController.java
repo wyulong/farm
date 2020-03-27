@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.List;
 
 /**  通用接口，登录、评论、收藏、搜索功能
@@ -31,7 +32,7 @@ public class CommonController {
      * @return
      */
     @PostMapping("/register")
-    public Result<Boolean> register(@RequestBody RegisterDTO registerDTO){
+    public Boolean register(@RequestBody RegisterDTO registerDTO){
         return authService.register(registerDTO);
     }
 
@@ -42,7 +43,7 @@ public class CommonController {
      */
     @PostMapping("/login")
     @OpenApi
-    public Result<LoginInfoDTO> login(@RequestBody LoginParamsDTO loginParamsDTO){
+    public LoginInfoDTO login(@RequestBody LoginParamsDTO loginParamsDTO){
         return authService.verifyPhoneAndPassword(loginParamsDTO.getPhone(), loginParamsDTO.getPassword());
     }
 
@@ -50,9 +51,9 @@ public class CommonController {
      *   菜单权限接口
      */
     @GetMapping("/menu")
-    public Result<List> menu(){
+    public List menu(){
         //TODO 根据角色返回角色权限
-        return Result.success();
+        return Collections.emptyList();
     }
 
 }

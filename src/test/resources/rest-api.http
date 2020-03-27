@@ -1,0 +1,33 @@
+
+POST http://localhost:8099/api/applys
+Accept: application/json
+Cache-Control: no-cache
+Content-Type: application/json;charset=UTF-8
+
+{
+  "userId": 1,
+  "userName": "demoDa22ta",
+  "phone": "demoData333",
+  "address": "demoData333",
+  "amount": "demoData222",
+  "applyReason": "demoDa222ta",
+  "content": "demoData222",
+  "status": 1,
+  "authId": 1,
+  "refuseDesc": "demoDat222a"
+}
+
+<> 2020-03-27T023523.200.json
+
+###
+
+
+GET http://localhost:8099/api/applys?page=1&pageSize=10
+Accept: application/json
+Cache-Control: no-cache
+Content-Type: application/json;charset=UTF-8
+
+###
+
+
+

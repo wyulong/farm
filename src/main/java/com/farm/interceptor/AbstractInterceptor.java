@@ -3,7 +3,7 @@ package com.farm.interceptor;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.farm.annotation.OpenApi;
-import com.farm.constants.ErrorResult;
+import com.farm.constants.Errors;
 import com.farm.dto.Result;
 import com.farm.entity.User;
 import com.farm.mapper.UserMapper;
@@ -30,19 +30,6 @@ public abstract class AbstractInterceptor implements HandlerInterceptor {
     /** 鉴权方法，由子类实现 **/
     protected abstract boolean doCheck(HttpServletRequest request, HttpServletResponse response) throws Exception;
 
-    /**
-     *  快速响应失败
-     * @param response
-     * @param errorResult
-     * @return
-     * @throws Exception
-     */
-    protected boolean stopRequest(HttpServletResponse response, ErrorResult errorResult) throws Exception{
-        response.setHeader("Content-Type", "application/json;charset=UTF-8");
-        String json = objectMapper.writeValueAsString(Result.error(errorResult));
-        response.getWriter().print(json);
-        return false;
-    }
 
     /**
      *  免登录
