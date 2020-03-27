@@ -26,7 +26,7 @@ public class UserServiceTest {
     @Test
     public void test(){
 
-        User user = userService.getUser(1);
+        User user = userService.getById(1);
         System.out.println(JSON.toJSONString(user));
 
         String encryptStr = MD5Util.encrypt("123456");

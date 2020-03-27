@@ -95,6 +95,18 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- 数据库代码生成
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-generator</artifactId>
+            <version>3.3.1.tmp</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version>1.7</version>
+        </dependency>-->
+
         <!--&lt;!&ndash; https://mvnrepository.com/artifact/commons-io/commons-io &ndash;&gt;-->
         <!--<dependency>-->
             <!--<groupId>commons-io</groupId>-->

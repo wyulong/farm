@@ -1,12 +1,12 @@
 package com.farm.controller;
 
+import com.farm.entity.Comment;
 import com.farm.entity.User;
+import com.farm.service.CommentService;
 import com.farm.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -22,9 +22,17 @@ public class UserController {
     @Resource
     private UserService userService;
 
+    @Autowired
+    private CommentService commentService;
+
     @GetMapping("/get-user")
     public User getUser(@RequestParam("id")Integer id){
-        return userService.getUser(id);
+        return userService.getById(id);
+    }
+
+    @PostMapping("/add-comment")
+    public void addComment(@RequestBody Comment comment){
+        commentService.saveOrUpdate(comment);
     }
 
 }

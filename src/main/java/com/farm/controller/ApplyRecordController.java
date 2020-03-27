@@ -1,9 +1,7 @@
 package com.farm.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.farm.dto.Result;
 import com.farm.entity.ApplyRecord;
-import com.farm.mapper.ApplyRecordMapper;
 import com.farm.service.ApplyRecordService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +18,11 @@ public class ApplyRecordController {
     @Autowired
     private ApplyRecordService applyRecordService;
 
-    @Autowired
-    private ApplyRecordMapper applyRecordMapper;
+
 
     @GetMapping("/{id}")
     public ApplyRecord getRecord(@PathVariable Integer id) {
-        return applyRecordMapper.selectById(id);
+        return applyRecordService.getById(id);
     }
 
     @GetMapping
@@ -37,18 +34,18 @@ public class ApplyRecordController {
     public void save(@RequestBody ApplyRecord applyRecord) {
         applyRecord.setCreateTime(new Date());
         applyRecord.setUpdateTime(new Date());
-        applyRecordMapper.insert(applyRecord);
+        applyRecordService.save(applyRecord);
     }
 
     @PutMapping
     public void update(@RequestBody ApplyRecord applyRecord) {
         applyRecord.setUpdateTime(new Date());
-        applyRecordMapper.updateById(applyRecord);
+        applyRecordService.updateById(applyRecord);
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Integer id) {
-        applyRecordMapper.deleteById(id);
+        applyRecordService.removeById(id);
     }
 
 }
