@@ -43,7 +43,7 @@ CREATE TABLE `apply_record`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `article`;
 CREATE TABLE `article`  (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `author_id` int(11) NULL DEFAULT NULL COMMENT '作者ID',
   `type` tinyint(4) NULL DEFAULT NULL COMMENT '文章类别',
   `title` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文章标题',

@@ -39,7 +39,6 @@ public class TechnologyController {
      */
     @PostMapping("/article/save")
     public void saveArticle(@RequestBody Article article){
-        String token = SessionContext.getRemoteSid();
         article.setAuthorId(userService.currentUser().getId());
         article.setStatus(ArticleStatus.VALID.getCode());
         articleService.saveOrUpdate(article);
