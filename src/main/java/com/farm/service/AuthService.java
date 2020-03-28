@@ -97,6 +97,12 @@ public class AuthService {
             Exceptions.throwss("错误的身份证号");
         }
 
+        User query = User.builder().phone(registerDTO.getPhone()).build();
+        User existUser = userMapper.selectOne(new QueryWrapper<>(query));
+        if (ObjectUtils.isNotEmpty(existUser)){
+            Exceptions.throwss("号码已注册");
+        }
+
         User user = User.builder().
                 name(registerDTO.getName()).
                 password(MD5Util.encrypt(registerDTO.getPassword())).
