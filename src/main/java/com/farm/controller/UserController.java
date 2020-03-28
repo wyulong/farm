@@ -81,6 +81,7 @@ public class UserController {
      */
     @PostMapping("/apply")
     public void save(@RequestBody ApplyRecord applyRecord) {
+        applyRecord.setUserId(userService.currentUser().getId());
         applyRecord.setCreateTime(new Date());
         applyRecord.setUpdateTime(new Date());
         applyRecordService.save(applyRecord);
