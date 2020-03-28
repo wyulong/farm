@@ -1,5 +1,6 @@
 package com.farm.constants;
 
+import com.farm.dto.BizException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,7 +17,9 @@ public enum Errors {
     ILLEGAL_PARAMS(400, "illegal arguments"),
     INVALID_TOKEN(401, "invalid token"),
     NOT_ACCEPT(406,"invalid request"),
-    SERVER_ERROR(500,"server exception");
+    SERVER_ERROR(500,"server exception"),
+    NOT_FOUND(404,"请求数据不存在"),
+    ;
 
     private int code;
     private String message;
@@ -27,6 +30,10 @@ public enum Errors {
 
     public String getMessage() {
         return message;
+    }
+
+    public static BizException of(Errors errors){
+        return new BizException(errors);
     }
 
 }

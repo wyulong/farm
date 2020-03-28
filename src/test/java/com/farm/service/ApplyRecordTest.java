@@ -24,7 +24,7 @@ public class ApplyRecordTest {
 
     @Test
     public void test() {
-        ApplyRecord result = applyRecordService.getApplyRecord(1);
+        ApplyRecord result = applyRecordService.getById(1);
         System.out.println(JSON.toJSONString(result));
 
     }
