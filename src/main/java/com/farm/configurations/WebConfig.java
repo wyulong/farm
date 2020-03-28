@@ -2,6 +2,8 @@ package com.farm.configurations;
 
 import com.farm.interceptor.AdminInterceptor;
 import com.farm.interceptor.ContextInterceptor;
+import com.farm.interceptor.TechInterceptor;
+import com.farm.interceptor.UserInterceptor;
 import com.farm.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,12 @@ public class WebConfig implements WebMvcConfigurer {
     private AdminInterceptor adminInterceptor;
 
     @Autowired
+    private TechInterceptor techInterceptor;
+
+    @Autowired
+    private UserInterceptor userInterceptor;
+
+    @Autowired
     private UserService userService;
 
     /**
@@ -36,6 +44,10 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(contextInterceptor).addPathPatterns("/**");
         //管理员请求拦截
         registry.addInterceptor(adminInterceptor).addPathPatterns("/admin/*");
+
+        registry.addInterceptor(techInterceptor).addPathPatterns("/tech/*");
+
+        registry.addInterceptor(userInterceptor).addPathPatterns("/user/*");
         // TODO 各个角色拦截器
     }
 

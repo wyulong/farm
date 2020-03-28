@@ -36,7 +36,7 @@ public abstract class AbstractInterceptor implements HandlerInterceptor {
      * @param handler
      * @return
      */
-    protected boolean isOpenApi(Object handler){
+    protected Boolean isOpenApi(Object handler){
         if (handler instanceof HandlerMethod){
             HandlerMethod handlerMethod = (HandlerMethod)handler;
             Method method = handlerMethod.getMethod();

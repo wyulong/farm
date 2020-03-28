@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 /**
  * <p>
@@ -34,6 +35,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public User currentUser() {
         User query = new User();
         query.setToken(SessionContext.getRemoteSid());
-        return userMapper.selectOne(new QueryWrapper<>(query));
+        return userMapper.selectOne(new QueryWrapper<>(query).gt("token_expire_time",new Date()));
     }
 }

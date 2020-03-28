@@ -4,4 +4,7 @@
 <mapper namespace="com.farm.mapper.UserMapper">
 
 
+    <select id="selectUserByToken" resultType="com.farm.entity.User">
+        select * from user where token = #{token} and token_expire_time > now()
+    </select>
 </mapper>

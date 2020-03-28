@@ -14,4 +14,11 @@
         <result column="update_time" property="updateTime" />
     </resultMap>
 
+    <select id="searchArticle" resultMap="BaseResultMap">
+        select * from article where 1=1 and status = 1
+        <if test="content != null and content != ''">
+            and title like CONCAT('%','${content}','%' ) or content like CONCAT('%','${content}','%' )
+        </if>
+    </select>
+
 </mapper>

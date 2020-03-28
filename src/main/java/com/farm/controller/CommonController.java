@@ -5,6 +5,8 @@ import com.farm.dto.Result;
 import com.farm.dto.req.LoginParamsDTO;
 import com.farm.dto.req.RegisterDTO;
 import com.farm.dto.res.LoginInfoDTO;
+import com.farm.entity.Article;
+import com.farm.service.ArticleService;
 import com.farm.service.AuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +27,9 @@ public class CommonController {
 
     @Resource
     private AuthService authService;
+
+    @Resource
+    private ArticleService articleService;
 
     /**
      *  注册接口
@@ -54,6 +59,16 @@ public class CommonController {
     public List menu(){
         //TODO 根据角色返回角色权限
         return Collections.emptyList();
+    }
+
+    /**
+     *  搜索文章
+     * @param content
+     * @return
+     */
+    @GetMapping("/search")
+    public List search(@RequestParam("content")String content){
+        return articleService.searchArticle(content);
     }
 
 }
