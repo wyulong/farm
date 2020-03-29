@@ -43,11 +43,11 @@ public class WebConfig implements WebMvcConfigurer {
         //全局拦截器，初始化请求参数
         registry.addInterceptor(contextInterceptor).addPathPatterns("/**");
         //管理员请求拦截
-        registry.addInterceptor(adminInterceptor).addPathPatterns("/admin/*");
+        registry.addInterceptor(adminInterceptor).addPathPatterns("/admin/**");
 
-        registry.addInterceptor(techInterceptor).addPathPatterns("/tech/*");
+        registry.addInterceptor(techInterceptor).addPathPatterns("/tech/**");
 
-        registry.addInterceptor(userInterceptor).addPathPatterns("/user/*");
+        registry.addInterceptor(userInterceptor).addPathPatterns("/user/**");
         // TODO 各个角色拦截器
     }
 
