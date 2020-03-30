@@ -1,9 +1,13 @@
 package com.farm.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.farm.entity.BusinessSumup;
 import com.farm.entity.Notice;
+import com.farm.service.BusinessSumupService;
 import com.farm.service.NoticeService;
+import com.farm.util.Exceptions;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +25,9 @@ public class AdminController {
 
     @Autowired
     private NoticeService noticeService;
+
+    @Autowired
+    private BusinessSumupService businessSumupService;
 
     /**
      * 测试接口
@@ -51,6 +58,7 @@ public class AdminController {
      */
     @PostMapping("/notice")
     public void saveNotice(@RequestBody Notice notice) {
+        notice.setStatus(1);
         noticeService.saveOrUpdate(notice);
     }
 
@@ -61,7 +69,13 @@ public class AdminController {
      */
     @DeleteMapping("/notice/{id}")
     public void deleteNotice(@PathVariable Integer id) {
-        noticeService.removeById(id);
+        Notice notice = noticeService.getById(id);
+        if (ObjectUtils.isEmpty(notice)){
+            Exceptions.throwss("公告不存在");
+        }else {
+            notice.setStatus(0);
+            noticeService.saveOrUpdate(notice);
+        }
     }
 
     /**
@@ -84,6 +98,30 @@ public class AdminController {
         //审批状态
         //添加图片
 
+    }
+
+    /**
+     *  保存&修改下乡总结
+     * @param businessSumup
+     */
+    @PostMapping("/sumup")
+    public void sumup(@RequestBody BusinessSumup businessSumup){
+        businessSumup.setStatus(1);
+        businessSumupService.saveOrUpdate(businessSumup);
+    }
+
+    /**
+     *  撤回下乡总结
+     * @param id
+     */
+    @DeleteMapping("/sumup/{id}")
+    public void deleteSumup(@PathVariable("id")Integer id){
+        BusinessSumup businessSumup = businessSumupService.getById(id);
+        if (ObjectUtils.isEmpty(businessSumup)){
+            Exceptions.throwss("总结不存在");
+        }else {
+            businessSumup.setStatus(0);
+        }
     }
 
 

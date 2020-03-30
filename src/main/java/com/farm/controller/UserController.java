@@ -2,10 +2,7 @@ package com.farm.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.farm.constants.Errors;
-import com.farm.entity.ApplyRecord;
-import com.farm.entity.Comment;
-import com.farm.entity.User;
-import com.farm.entity.UserCollect;
+import com.farm.entity.*;
 import com.farm.service.*;
 import com.farm.util.Exceptions;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +42,9 @@ public class UserController {
 
     @Autowired
     private ArticleService articleService;
+
+    @Autowired
+    private UserPlantService userPlantService;
 
     @GetMapping("/get-user")
     public User getUser(@RequestParam("id") Integer id) {
@@ -155,6 +155,36 @@ public class UserController {
                 .updateTime(LocalDateTime.now())
                 .build();
         commentService.saveOrUpdate(comment1);
+    }
+
+    /**
+     *  添加&修改种植信息
+     * @param userPlant
+     */
+    @PostMapping("/plant")
+    public void savePlantInfo(@RequestBody UserPlant userPlant){
+        userPlantService.saveOrUpdate(userPlant);
+    }
+
+    /**
+     *  删除种植信息
+     * @param id
+     */
+    @DeleteMapping("/plant/{id}")
+    public void deletePalntInfo(@PathVariable("id")Integer id){
+        userPlantService.removeById(id);
+    }
+
+    /**
+     *  种植信息列表
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    @GetMapping("/list-plant")
+    public IPage<UserPlant> getPlantInfo(long page, long pageSize){
+        User user = userService.currentUser();
+        return userPlantService.getPlantInfo(user.getId(),page,pageSize);
     }
 
 
