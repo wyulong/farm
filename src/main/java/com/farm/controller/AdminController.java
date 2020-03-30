@@ -3,14 +3,24 @@ package com.farm.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.farm.constants.Errors;
+import com.farm.dto.req.RegisterDTO;
 import com.farm.entity.BusinessSumup;
 import com.farm.entity.Notice;
+import com.farm.entity.User;
+import com.farm.service.AuthService;
 import com.farm.service.BusinessSumupService;
 import com.farm.service.NoticeService;
+import com.farm.service.UserService;
 import com.farm.util.Exceptions;
+import com.farm.util.MD5Util;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
+import java.util.Optional;
 
 /**
  * 管理员接口
@@ -28,7 +38,11 @@ public class AdminController {
 
     @Autowired
     private BusinessSumupService businessSumupService;
+    @Autowired
+    private UserService userService;
 
+    @Autowired
+    private AuthService authService;
     /**
      * 测试接口
      *
@@ -38,6 +52,8 @@ public class AdminController {
     public String get() {
         return "123";
     }
+
+
 
     /**
      * 获取公告分页数据
@@ -122,6 +138,50 @@ public class AdminController {
         }else {
             businessSumup.setStatus(0);
         }
+    }
+
+    @PostMapping("/user")
+    public void saveUser(@RequestBody RegisterDTO registerDTO){
+        authService.register(registerDTO);
+    }
+
+    @PutMapping("/user")
+    public void updateUser(@RequestBody User user){
+        User dbUser = Optional.ofNullable(userService.getById(user.getId())).orElseThrow(() -> Errors.of("用户不存在"));
+        userService.validUser(user);
+        if (user.getPassword() != null){
+            String password = MD5Util.encrypt(user.getPassword());
+            if(!StringUtils.equals(dbUser.getPassword(),password)){
+                user.setToken(null);
+                user.setTokenExpireTime(new Date());
+                user.setPassword(password);
+            }
+        }else {
+            user.setToken(dbUser.getToken());
+            user.setTokenExpireTime(dbUser.getTokenExpireTime());
+            user.setPassword(dbUser.getPassword());
+        }
+
+        user.setUpdateTime(new Date());
+        userService.saveOrUpdate(user);
+    }
+
+    @GetMapping("/user/{userId}")
+    public User getUser(@PathVariable Integer userId){
+        User user = userService.getById(userId);
+        user.setPassword(null);
+        return user;
+    }
+
+    @GetMapping("/user")
+    public IPage<User> getUserPage(long page,long pageSize){
+        return userService.page(new Page<>(page,pageSize));
+    }
+
+    @DeleteMapping("/user/{userId}")
+    public void deleteUser(@PathVariable Integer userId){
+        User dbUser = Optional.ofNullable(userService.getById(userId)).orElseThrow(() -> Errors.of("用户不存在"));
+        userService.removeById(userId);
     }
 
 
