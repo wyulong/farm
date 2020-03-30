@@ -48,7 +48,7 @@ CREATE TABLE `article`  (
   `type` tinyint(4) NULL DEFAULT NULL COMMENT '文章类别',
   `title` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文章标题',
   `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '文章内容',
-  `status` tinyint(4) NULL DEFAULT NULL COMMENT '状态',
+  `status` tinyint(4) NULL DEFAULT NULL COMMENT '状态 1、发布中，0、已删除',
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
@@ -63,7 +63,7 @@ CREATE TABLE `business_sumup`  (
   `author_id` int(11) NULL DEFAULT NULL COMMENT '作者id',
   `time` timestamp(0) NULL DEFAULT NULL COMMENT '下乡时间',
   `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '内容',
-  `status` tinyint(4) DEFAULT NULL COMMENT '状态',
+  `status` tinyint(4) DEFAULT NULL COMMENT '状态 1、发布，0、撤回',
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
@@ -77,7 +77,7 @@ CREATE TABLE `comment`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NULL DEFAULT NULL COMMENT '评论人',
   `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '评论内容',
-  `status` tinyint(4) NULL DEFAULT NULL COMMENT '状态',
+  `status` tinyint(4) NULL DEFAULT NULL COMMENT '状态 1、有效，0、无效',
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '评论时间',
   `update_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
@@ -92,7 +92,7 @@ CREATE TABLE `notice`  (
   `author_id` int(11) NULL DEFAULT NULL COMMENT '作者ID',
   `title` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '公告标题',
   `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '公告内容',
-  `status` tinyint(4) NULL DEFAULT NULL COMMENT '公告状态',
+  `status` tinyint(4) NULL DEFAULT NULL COMMENT '公告状态 1、发布，2、撤回',
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '发布时间',
   `update_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
