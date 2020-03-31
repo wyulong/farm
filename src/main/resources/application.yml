@@ -1,7 +1,7 @@
 server:
   port: 8099
   servlet:
-    context-path: /api
+    context-path: /
 spring:
   application:
     name: farm-manage-system
