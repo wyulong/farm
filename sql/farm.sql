@@ -42,17 +42,18 @@ CREATE TABLE `apply_record`  (
 -- Table structure for article
 -- ----------------------------
 DROP TABLE IF EXISTS `article`;
-CREATE TABLE `article`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `author_id` int(11) NULL DEFAULT NULL COMMENT '作者ID',
-  `type` tinyint(4) NULL DEFAULT NULL COMMENT '文章类别',
-  `title` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文章标题',
-  `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '文章内容',
-  `status` tinyint(4) NULL DEFAULT NULL COMMENT '状态 1、发布中，0、已删除',
-  `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
-  `update_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '文章表' ROW_FORMAT = Dynamic;
+CREATE TABLE `article` (
+  `id` int(11) NOT NULL,
+  `author_id` int(11) DEFAULT NULL COMMENT '作者ID',
+  `type` tinyint(4) DEFAULT NULL COMMENT '文章类别 1、公告 2、栽培方法 3、病虫防治',
+  `title` varchar(64) DEFAULT NULL COMMENT '文章标题',
+  `cover_img` varchar(255) DEFAULT NULL COMMENT '封面缩略图',
+  `content` text COMMENT '文章内容',
+  `status` tinyint(4) DEFAULT NULL COMMENT '状态',
+  `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文章、公告表';
 
 -- ----------------------------
 -- Table structure for business_sumup
