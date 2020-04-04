@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.core.config.GlobalConfig;
 import com.baomidou.mybatisplus.extension.injector.LogicSqlInjector;
+import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
+import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -39,13 +41,24 @@ public class DbConfiguration {
         return DataSourceBuilder.create().type(dataSourceType).build();
     }
 
+    /**
+     *  mysql分页插件
+     * @return
+     */
+    @Bean("pagePlugins")
+    public PaginationInterceptor paginationInterceptor(){
+        return new PaginationInterceptor().setDialectType("mysql");
+    }
+
     /** 会话工厂 **/
     @Primary
     @Bean("sqlSessionFactory")
-    public SqlSessionFactory sqlSessionFactory(@Qualifier("dbConfig")DataSource dataSource) throws Exception{
+    public SqlSessionFactory sqlSessionFactory(@Qualifier("dbConfig")DataSource dataSource,@Qualifier("pagePlugins") PaginationInterceptor paginationInterceptor) throws Exception{
         MybatisSqlSessionFactoryBean factoryBean = new MybatisSqlSessionFactoryBean();
         factoryBean.setDataSource(dataSource);
         factoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mapper/*.xml"));
+        Interceptor[] plugins = {paginationInterceptor};
+        factoryBean.setPlugins(plugins);
         return factoryBean.getObject();
     }
 
