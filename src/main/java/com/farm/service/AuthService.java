@@ -3,6 +3,7 @@ package com.farm.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.farm.constants.CommonConstants;
 import com.farm.constants.Enums;
 import com.farm.constants.UserType;
 import com.farm.dto.req.RegisterDTO;
@@ -24,11 +25,6 @@ import java.util.UUID;
  **/
 @Service
 public class AuthService {
-
-    /**
-     * token过期时间
-     **/
-    private final static int TOKEN_EXPIRE_TIME = 15 * 60 * 1000;
 
     @Resource
     private UserMapper userMapper;
@@ -68,7 +64,7 @@ public class AuthService {
         }
         String token = UUID.randomUUID().toString();
         user1.setToken(token);
-        user1.setTokenExpireTime(new Date(System.currentTimeMillis() + TOKEN_EXPIRE_TIME));
+        user1.setTokenExpireTime(new Date(System.currentTimeMillis() + CommonConstants.TOKEN_EXPIRE_TIME));
         userMapper.updateById(user1);
 
         UserType userType = Enums.valueOf(user1.getType(),UserType.class);

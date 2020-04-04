@@ -3,6 +3,7 @@ package com.farm.interceptor;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.farm.annotation.OpenApi;
+import com.farm.constants.CommonConstants;
 import com.farm.constants.Errors;
 import com.farm.dto.Result;
 import com.farm.entity.User;
@@ -15,6 +16,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
+import java.util.Date;
 
 /**
  * @Author xhua
@@ -58,7 +60,14 @@ public abstract class AbstractInterceptor implements HandlerInterceptor {
         User query = new User();
         query.setToken(token);
         User user = userMapper.selectOne(new QueryWrapper<>(query));
-        return ObjectUtils.isNotEmpty(user) && user.getTokenExpireTime().getTime() > System.currentTimeMillis();
+        if (ObjectUtils.isNotEmpty(user) && user.getTokenExpireTime().getTime() > System.currentTimeMillis()){
+            //验证成功后刷新缓存时间
+            user.setTokenExpireTime(new Date(System.currentTimeMillis() + CommonConstants.TOKEN_EXPIRE_TIME));
+            userMapper.updateById(user);
+            return true;
+        }
+
+        return false;
     }
 
 }
