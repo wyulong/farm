@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public enum ArticleType implements Enums {
 
-    NOTICLE(1,"公告"),
+    NOTICE(1,"公告"),
     PLANT(2,"栽培方法"),
     BUG(3,"病虫防治");
 

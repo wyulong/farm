@@ -1,5 +1,7 @@
 package com.farm.mapper;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.farm.dto.res.ArticleDTO;
 import com.farm.entity.Article;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -19,4 +21,5 @@ public interface ArticleMapper extends BaseMapper<Article> {
 
     List<ArticleDTO> searchArticle(@Param("content")String content);
 
+    List<ArticleDTO> searchNotice(IPage<ArticleDTO> iPage);
 }

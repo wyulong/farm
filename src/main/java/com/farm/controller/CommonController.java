@@ -1,9 +1,11 @@
 package com.farm.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.farm.annotation.OpenApi;
 import com.farm.dto.Result;
 import com.farm.dto.req.LoginParamsDTO;
 import com.farm.dto.req.RegisterDTO;
+import com.farm.dto.res.ArticleDTO;
 import com.farm.dto.res.LoginInfoDTO;
 import com.farm.entity.Article;
 import com.farm.service.ArticleService;
@@ -69,6 +71,11 @@ public class CommonController {
     @GetMapping("/article/search")
     public List search(@RequestParam(value = "content",required = false)String content){
         return articleService.searchArticle(content);
+    }
+
+    @GetMapping("/notice")
+    public IPage<ArticleDTO> notice(@RequestParam("page")Integer page, @RequestParam("pageSize")Integer pageSize){
+        return articleService.getNotice(page,pageSize);
     }
 
 }

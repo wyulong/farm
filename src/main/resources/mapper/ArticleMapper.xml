@@ -32,4 +32,20 @@
         order by t1.create_time desc
     </select>
 
+    <select id="searchNotice" resultType="com.farm.dto.res.ArticleDTO">
+        SELECT
+          t1.id,
+          t2.`name` as authorName,
+          t1.cover_img as coverImg,
+          "公告" AS typeDesc,
+          t1.`type`,
+          t1.title,
+          t1.content,
+          t1.create_time as createTime
+        FROM
+          article t1 LEFT JOIN `user` t2 on t1.author_id = t2.id
+        where t1.status = 1 and t1.type = 1
+        order by t1.create_time desc
+    </select>
+
 </mapper>

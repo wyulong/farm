@@ -43,7 +43,7 @@ CREATE TABLE `apply_record`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `article`;
 CREATE TABLE `article` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `author_id` int(11) DEFAULT NULL COMMENT '作者ID',
   `type` tinyint(4) DEFAULT NULL COMMENT '文章类别 1、公告 2、栽培方法 3、病虫防治',
   `title` varchar(64) DEFAULT NULL COMMENT '文章标题',
