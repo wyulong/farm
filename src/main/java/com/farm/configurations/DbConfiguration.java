@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 
@@ -69,6 +70,7 @@ public class DbConfiguration {
         return new DataSourceTransactionManager(dataSource);
     }
 
+    @PostConstruct
     @Bean("globalConfig")
     public GlobalConfig globalConfig(){
         // 全局配置文件
