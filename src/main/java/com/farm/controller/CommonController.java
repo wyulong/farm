@@ -66,8 +66,8 @@ public class CommonController {
      * @param content
      * @return
      */
-    @GetMapping("/search")
-    public List search(@RequestParam("content")String content){
+    @GetMapping("/article/search")
+    public List search(@RequestParam(value = "content",required = false)String content){
         return articleService.searchArticle(content);
     }
 

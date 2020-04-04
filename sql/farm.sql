@@ -49,7 +49,7 @@ CREATE TABLE `article` (
   `title` varchar(64) DEFAULT NULL COMMENT '文章标题',
   `cover_img` varchar(255) DEFAULT NULL COMMENT '封面缩略图',
   `content` text COMMENT '文章内容',
-  `status` tinyint(4) DEFAULT NULL COMMENT '状态',
+  `status` tinyint(4) DEFAULT NULL COMMENT '状态 1、有效 2、已删除（撤回）',
   `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)

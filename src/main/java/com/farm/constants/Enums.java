@@ -12,7 +12,7 @@ public interface Enums {
         try {
             Method method = enumType.getMethod("values");
             T[] ts = (T[]) method.invoke(enumType);
-            System.out.println(Arrays.toString(ts));
+//            System.out.println(Arrays.toString(ts));
             for (T t : ts) {
                 if (t.getCode() == code) {
                     return t;

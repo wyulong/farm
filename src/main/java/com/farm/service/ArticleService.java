@@ -1,6 +1,9 @@
 package com.farm.service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.farm.constants.ArticleType;
+import com.farm.constants.Enums;
+import com.farm.dto.res.ArticleDTO;
 import com.farm.entity.Article;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.farm.mapper.ArticleMapper;
@@ -24,7 +27,14 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
     private ArticleMapper articleMapper;
 
 
-    public List<Article> searchArticle(String content) {
-        return articleMapper.searchArticle(content);
+    public List<ArticleDTO> searchArticle(String content) {
+        List<ArticleDTO> list = articleMapper.searchArticle(content);
+        //文章描述
+        for (ArticleDTO articleDTO:list){
+            ArticleType articleType = Enums.valueOf(articleDTO.getType(),ArticleType.class);
+            articleDTO.setTypeDesc(articleType == null ? null:articleType.getDesc());
+        };
+
+        return list;
     }
 }
