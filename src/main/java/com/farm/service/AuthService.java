@@ -3,6 +3,7 @@ package com.farm.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.farm.constants.Enums;
 import com.farm.constants.UserType;
 import com.farm.dto.req.RegisterDTO;
 import com.farm.dto.res.LoginInfoDTO;
@@ -70,7 +71,7 @@ public class AuthService {
         user1.setTokenExpireTime(new Date(System.currentTimeMillis() + TOKEN_EXPIRE_TIME));
         userMapper.updateById(user1);
 
-        UserType userType = UserType.getUserTypeByCode(user1.getType());
+        UserType userType = Enums.valueOf(user1.getType(),UserType.class);
         LoginInfoDTO loginInfoDTO = LoginInfoDTO.builder().
                 token(token).
                 userType(user1.getType()).

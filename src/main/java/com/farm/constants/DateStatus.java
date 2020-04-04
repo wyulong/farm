@@ -8,8 +8,7 @@ import lombok.NoArgsConstructor;
  * @Date 2020/3/28 14:30
  **/
 @AllArgsConstructor
-@NoArgsConstructor
-public enum ArticleStatus {
+public enum DateStatus implements Enums{
 
     VALID(1,"有效的"),
     INVALID(0,"无效的");
@@ -21,16 +20,8 @@ public enum ArticleStatus {
         return code;
     }
 
-    public void setCode(int code) {
-        this.code = code;
-    }
-
     public String getDesc() {
         return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
     }
 
 

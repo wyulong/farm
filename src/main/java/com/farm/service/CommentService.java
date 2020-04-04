@@ -1,7 +1,10 @@
 package com.farm.service;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.farm.entity.Comment;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.farm.mapper.CommentMapper;
+import org.springframework.stereotype.Service;
 
 /**
  * <p>
@@ -11,6 +14,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author wyulong
  * @since 2020-03-27
  */
-public interface CommentService extends IService<Comment> {
+@Service
+public class CommentService extends ServiceImpl<CommentMapper, Comment>{
 
 }
+
