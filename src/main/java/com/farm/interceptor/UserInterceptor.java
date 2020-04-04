@@ -43,7 +43,7 @@ public class UserInterceptor extends AbstractInterceptor{
     @Override
     protected boolean doCheck(HttpServletRequest request, HttpServletResponse response) {
         if (SessionContext.getRemoteSid() == null) {
-            Exceptions.throwss(Errors.ILLEGAL_PARAMS);
+            Exceptions.throwss(Errors.INVALID_TOKEN);
         }
         if (!verifyToken()) {
             Exceptions.throwss(Errors.INVALID_TOKEN);
