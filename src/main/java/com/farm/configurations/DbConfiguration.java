@@ -47,7 +47,7 @@ public class DbConfiguration {
      */
     @Bean("pagePlugins")
     public PaginationInterceptor paginationInterceptor(){
-        return new PaginationInterceptor().setDialectType("mysql");
+        return new PaginationInterceptor().setDialectType(DbType.MYSQL.getDb());
     }
 
     /** 会话工厂 **/
