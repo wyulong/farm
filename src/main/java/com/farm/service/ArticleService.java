@@ -30,15 +30,17 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
     private ArticleMapper articleMapper;
 
 
-    public List<ArticleDTO> searchArticle(String content) {
-        List<ArticleDTO> list = articleMapper.searchArticle(content);
+    public IPage<ArticleDTO> searchArticle(String content,Long page,Long pageSize) {
+        Page<ArticleDTO> ipage = new Page<>(page,pageSize);
+
+        List<ArticleDTO> list = articleMapper.searchArticle(ipage,content);
         //文章描述
         for (ArticleDTO articleDTO:list){
             ArticleType articleType = Enums.valueOf(articleDTO.getType(),ArticleType.class);
             articleDTO.setTypeDesc(articleType == null ? null:articleType.getDesc());
         };
 
-        return list;
+        return ipage.setRecords(list);
     }
 
     /**

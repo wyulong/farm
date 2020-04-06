@@ -74,8 +74,8 @@ public class CommonController {
      * @return
      */
     @GetMapping("/article/search")
-    public List search(@RequestParam(value = "content",required = false)String content){
-        return articleService.searchArticle(content);
+    public IPage<ArticleDTO> search(@RequestParam(value = "content",required = false)String content,@RequestParam("page") Long page, @RequestParam("pageSize") Long pageSize){
+        return articleService.searchArticle(content,page,pageSize);
     }
 
     /**
@@ -89,6 +89,11 @@ public class CommonController {
         return articleService.getNotice(page,pageSize);
     }
 
+    /**
+     *  上传文件
+     * @param file
+     * @return
+     */
     @ResponseBody
     @RequestMapping("upload")
     public String upload(@RequestParam("file")MultipartFile file){

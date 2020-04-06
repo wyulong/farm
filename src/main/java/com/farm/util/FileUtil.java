@@ -37,8 +37,8 @@ public class FileUtil {
      */
     public static String renameFile(String fileName){
         int index = fileName.lastIndexOf(".");
-        String name = fileName.substring(index);
-        return UUID.randomUUID().toString().replace("-", "") + name;
+        String suffix = fileName.substring(index);
+        return UUID.randomUUID().toString().replace("-", "") + suffix;
     }
 
 }

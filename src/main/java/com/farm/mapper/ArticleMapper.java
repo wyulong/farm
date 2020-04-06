@@ -19,7 +19,7 @@ import java.util.List;
  */
 public interface ArticleMapper extends BaseMapper<Article> {
 
-    List<ArticleDTO> searchArticle(@Param("content")String content);
+    List<ArticleDTO> searchArticle(IPage<ArticleDTO> iPage,@Param("content")String content);
 
     List<ArticleDTO> searchNotice(IPage<ArticleDTO> iPage);
 }
