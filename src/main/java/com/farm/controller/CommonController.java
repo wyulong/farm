@@ -2,16 +2,18 @@ package com.farm.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.farm.annotation.OpenApi;
-import com.farm.dto.Result;
+import com.farm.configurations.UploadConfiguration;
 import com.farm.dto.req.LoginParamsDTO;
 import com.farm.dto.req.RegisterDTO;
 import com.farm.dto.res.ArticleDTO;
 import com.farm.dto.res.LoginInfoDTO;
-import com.farm.entity.Article;
 import com.farm.service.ArticleService;
 import com.farm.service.AuthService;
+import com.farm.util.Exceptions;
+import com.farm.util.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.Collections;
@@ -32,6 +34,9 @@ public class CommonController {
 
     @Resource
     private ArticleService articleService;
+
+    @Resource
+    private UploadConfiguration uploadConfiguration;
 
     /**
      *  注册接口
@@ -73,9 +78,31 @@ public class CommonController {
         return articleService.searchArticle(content);
     }
 
+    /**
+     *  公告
+     * @param page
+     * @param pageSize
+     * @return
+     */
     @GetMapping("/notice")
     public IPage<ArticleDTO> notice(@RequestParam("page")Integer page, @RequestParam("pageSize")Integer pageSize){
         return articleService.getNotice(page,pageSize);
+    }
+
+    @ResponseBody
+    @RequestMapping("upload")
+    public String upload(@RequestParam("file")MultipartFile file){
+
+        String fileName = file.getOriginalFilename();
+        fileName = FileUtil.renameFile(fileName);
+
+        try {
+            FileUtil.upload(file.getBytes(),uploadConfiguration.getFilePath(),fileName);
+        }catch (Exception e){
+            Exceptions.throwss("上传文件失败");
+        }
+
+        return "/static/" + fileName;
     }
 
 }

@@ -43,6 +43,11 @@ public class Article implements Serializable {
     private String title;
 
     /**
+     *  封面图
+     */
+    private String coverImg;
+
+    /**
      * 文章内容
      */
     private String content;

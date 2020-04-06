@@ -10,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import javax.annotation.Resource;
 
 /**  Web 权限控制
  * @Author xhua
@@ -35,6 +38,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UploadConfiguration uploadConfiguration;
+
     /**
      *  添加拦截器，注意顺序
      * @param registry
@@ -50,6 +56,15 @@ public class WebConfig implements WebMvcConfigurer {
 
         registry.addInterceptor(userInterceptor).addPathPatterns("/user/**");
         // TODO 各个角色拦截器
+    }
+
+    /**
+     *  资源路径映射
+     * @param registry
+     */
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/static/**").addResourceLocations("file:///" +uploadConfiguration.getFilePath());
     }
 
     /**
