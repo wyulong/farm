@@ -3,22 +3,24 @@ package com.farm.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.farm.constants.ArticleType;
 import com.farm.constants.Errors;
+import com.farm.dto.req.ArticleParamsDTO;
 import com.farm.dto.req.RegisterDTO;
+import com.farm.dto.res.ArticleDTO;
+import com.farm.entity.Article;
 import com.farm.entity.BusinessSumup;
-import com.farm.entity.Notice;
 import com.farm.entity.User;
-import com.farm.service.AuthService;
-import com.farm.service.BusinessSumupService;
-import com.farm.service.NoticeService;
-import com.farm.service.UserService;
+import com.farm.service.*;
 import com.farm.util.Exceptions;
 import com.farm.util.MD5Util;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Optional;
 
@@ -34,26 +36,16 @@ import java.util.Optional;
 public class AdminController {
 
     @Autowired
-    private NoticeService noticeService;
-
-    @Autowired
     private BusinessSumupService businessSumupService;
+
     @Autowired
     private UserService userService;
 
     @Autowired
     private AuthService authService;
-    /**
-     * 测试接口
-     *
-     * @return
-     */
-    @GetMapping("/get")
-    public String get() {
-        return "123";
-    }
 
-
+    @Autowired
+    private ArticleService articleService;
 
     /**
      * 获取公告分页数据
@@ -63,19 +55,26 @@ public class AdminController {
      * @return
      */
     @GetMapping("/notice")
-    public IPage<Notice> getNoticePage(long page, long pageSize) {
-        return noticeService.page(new Page<>(page, pageSize));
+    public IPage<ArticleDTO> getNoticePage(@RequestParam("page")Long page,@RequestParam("pageSize")Long pageSize) {
+        return articleService.getNotice(page,pageSize);
     }
 
     /**
      * 保存公告&修改公告
      *
-     * @param notice 公告内容
+     * @param articleParamsDTO 公告内容
      */
     @PostMapping("/notice")
-    public void saveNotice(@RequestBody Notice notice) {
-        notice.setStatus(1);
-        noticeService.saveOrUpdate(notice);
+    public Boolean saveNotice(@RequestBody ArticleParamsDTO articleParamsDTO) {
+        Article article = new Article();
+        BeanUtils.copyProperties(articleParamsDTO,article);
+        article.setAuthorId(userService.currentUser().getId());
+        article.setStatus(1);
+        article.setCreateTime(LocalDateTime.now());
+
+        article.setType(ArticleType.NOTICE.getCode());
+
+        return articleService.saveOrUpdate(article);
     }
 
     /**
@@ -84,13 +83,13 @@ public class AdminController {
      * @param id 公告id
      */
     @DeleteMapping("/notice/{id}")
-    public void deleteNotice(@PathVariable Integer id) {
-        Notice notice = noticeService.getById(id);
-        if (ObjectUtils.isEmpty(notice)){
-            Exceptions.throwss("公告不存在");
+    public Boolean deleteNotice(@PathVariable Integer id) {
+        Article article = articleService.getById(id);
+        if (ObjectUtils.isEmpty(article)){
+            return false;
         }else {
-            notice.setStatus(0);
-            noticeService.saveOrUpdate(notice);
+            article.setStatus(0);
+            return articleService.saveOrUpdate(article);
         }
     }
 
@@ -101,8 +100,9 @@ public class AdminController {
      * @return
      */
     @GetMapping("/notice/{id}")
-    public Notice getNotice(@PathVariable Integer id) {
-        return noticeService.getById(id);
+    public ArticleDTO getNotice(@PathVariable Integer id) {
+
+        return articleService.getNoticeDetailById(id);
     }
 
     /**
@@ -122,6 +122,7 @@ public class AdminController {
      */
     @PostMapping("/sumup")
     public void sumup(@RequestBody BusinessSumup businessSumup){
+        businessSumup.setAuthorId(userService.currentUser().getId());
         businessSumup.setStatus(1);
         businessSumupService.saveOrUpdate(businessSumup);
     }

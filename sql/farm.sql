@@ -63,6 +63,7 @@ CREATE TABLE `business_sumup`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `author_id` int(11) NULL DEFAULT NULL COMMENT '作者id',
   `time` timestamp(0) NULL DEFAULT NULL COMMENT '下乡时间',
+  `cover_img` varchar(255) DEFAULT NULL COMMENT '封面缩略图',
   `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '内容',
   `status` tinyint(4) DEFAULT NULL COMMENT '状态 1、发布，0、撤回',
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',

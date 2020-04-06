@@ -38,6 +38,11 @@ public class BusinessSumup implements Serializable {
     private LocalDateTime time;
 
     /**
+     *  封面缩略图
+     */
+    private String coverImg;
+
+    /**
      * 内容
      */
     private String content;

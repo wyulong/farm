@@ -85,7 +85,7 @@ public class CommonController {
      * @return
      */
     @GetMapping("/notice")
-    public IPage<ArticleDTO> notice(@RequestParam("page")Integer page, @RequestParam("pageSize")Integer pageSize){
+    public IPage<ArticleDTO> notice(@RequestParam("page")Long page, @RequestParam("pageSize")Long pageSize){
         return articleService.getNotice(page,pageSize);
     }
 
