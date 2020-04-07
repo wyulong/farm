@@ -1,7 +1,11 @@
 package com.farm.mapper;
 
+import com.farm.dto.res.RoleModuleDTO;
 import com.farm.entity.UserRole;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,5 +16,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2020-03-27
  */
 public interface UserRoleMapper extends BaseMapper<UserRole> {
+
+    List<RoleModuleDTO> getMenuByUserType(@Param("type") Integer type);
 
 }

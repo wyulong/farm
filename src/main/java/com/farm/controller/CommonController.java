@@ -1,6 +1,7 @@
 package com.farm.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.farm.annotation.OpenApi;
 import com.farm.configurations.UploadConfiguration;
 import com.farm.dto.req.LoginParamsDTO;
@@ -8,9 +9,11 @@ import com.farm.dto.req.RegisterDTO;
 import com.farm.dto.res.ArticleDTO;
 import com.farm.dto.res.BusinessSumupDTO;
 import com.farm.dto.res.LoginInfoDTO;
+import com.farm.entity.User;
 import com.farm.service.ArticleService;
 import com.farm.service.AuthService;
 import com.farm.service.BusinessSumupService;
+import com.farm.service.UserService;
 import com.farm.util.Exceptions;
 import com.farm.util.FileUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -42,6 +46,9 @@ public class CommonController {
 
     @Resource
     private BusinessSumupService businessSumupService;
+
+    @Resource
+    private UserService userService;
 
     /**
      *  注册接口
@@ -69,8 +76,12 @@ public class CommonController {
      */
     @GetMapping("/menu")
     public List menu(){
-        //TODO 根据角色返回角色权限
-        return Collections.emptyList();
+        User user = userService.currentUser();
+        if (ObjectUtils.isEmpty(user)){
+            return Collections.emptyList();
+        }else {
+            return userService.getMenu(user.getType());
+        }
     }
 
     /**

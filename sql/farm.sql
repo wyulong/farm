@@ -141,7 +141,10 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (1, '超级管理员', '13786272773', 'e10adc3949ba59abbe56e057f20f883e', '12345678', 1, '186f9b23-7ba5-4a9e-b6e8-7fdbffe373a1', '2020-03-24 17:22:37', '2020-03-23 18:12:35', '2020-03-24 16:55:30');
+INSERT INTO `user`(`id`, `name`, `phone`, `password`, `card_id`, `type`, `token`, `token_expire_time`, `create_time`, `update_time`) VALUES (1, '超级管理员', '13766666666', 'e10adc3949ba59abbe56e057f20f883e', '	440305199603076778', 1, NULL, NULL, '2020-03-23 18:12:35', '2020-04-07 17:42:34');
+INSERT INTO `user`(`id`, `name`, `phone`, `password`, `card_id`, `type`, `token`, `token_expire_time`, `create_time`, `update_time`) VALUES (2, '技术员', '13788888888', 'e10adc3949ba59abbe56e057f20f883e', '440305199603079151', 2, NULL, NULL, '2020-04-07 17:41:55', '2020-04-07 17:42:37');
+INSERT INTO `user`(`id`, `name`, `phone`, `password`, `card_id`, `type`, `token`, `token_expire_time`, `create_time`, `update_time`) VALUES (3, '普通用户', '13799999999', 'e10adc3949ba59abbe56e057f20f883e', '440305199603079151', 3, NULL, NULL, '2020-04-07 17:42:56', '2020-04-07 17:43:09');
+
 
 -- ----------------------------
 -- Table structure for user_collect

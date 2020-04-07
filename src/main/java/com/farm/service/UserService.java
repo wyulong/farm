@@ -5,9 +5,11 @@ import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.farm.constants.Enums;
 import com.farm.constants.UserType;
+import com.farm.dto.res.RoleModuleDTO;
 import com.farm.entity.User;
 import com.farm.interceptor.SessionContext;
 import com.farm.mapper.UserMapper;
+import com.farm.mapper.UserRoleMapper;
 import com.farm.util.Exceptions;
 import com.farm.util.RegexUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author xhua
@@ -26,6 +29,9 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private UserRoleMapper userRoleMapper;
 
     public User currentUser() {
         User query = new User();
@@ -52,5 +58,9 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         if (!RegexUtil.validateCard(user.getCardId())){
             Exceptions.throwss("身份证号码不合法");
         }
+    }
+
+    public List<RoleModuleDTO> getMenu(Integer type) {
+        return userRoleMapper.getMenuByUserType(type);
     }
 }

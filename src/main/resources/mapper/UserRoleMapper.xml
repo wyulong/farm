@@ -5,11 +5,21 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.farm.entity.UserRole">
         <id column="id" property="id" />
-        <result column="user_id" property="userId" />
-        <result column="module_name" property="moduleName" />
-        <result column="url" property="url" />
+        <result column="role_id" property="roleId" />
+        <result column="module_id" property="moduleId" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
     </resultMap>
+
+    <select id="getMenuByUserType" resultType="com.farm.dto.res.RoleModuleDTO">
+        SELECT
+	      t1.module_id as moduleId,
+          t2.module_name as moduleName,
+          t2.url
+        FROM
+	      user_role t1 LEFT JOIN module t2 on t1.module_id = t2.id
+        WHERE
+	      role_id = #{type}
+    </select>
 
 </mapper>
