@@ -105,6 +105,11 @@ public class CommonController {
         return businessSumupService.listSumup(page,pageSize);
     }
 
+    /**
+     *  下乡总结详情
+     * @param id
+     * @return
+     */
     @GetMapping("/sumup-detail")
     public BusinessSumupDTO sumupDetail(@RequestParam("id")Integer id){
         return businessSumupService.sumupDetail(id);

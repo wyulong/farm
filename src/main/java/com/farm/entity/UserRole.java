@@ -30,17 +30,12 @@ public class UserRole implements Serializable {
     /**
      * 用户ID
      */
-    private Integer userId;
+    private Integer roleId;
 
     /**
      * 模块名称
      */
-    private String moduleName;
-
-    /**
-     * 模块URL
-     */
-    private String url;
+    private String moduleId;
 
     /**
      * 创建时间

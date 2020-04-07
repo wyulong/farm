@@ -178,12 +178,53 @@ CREATE TABLE `user_plant`  (
 DROP TABLE IF EXISTS `user_role`;
 CREATE TABLE `user_role`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NULL DEFAULT NULL COMMENT '用户ID',
-  `module_name` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '模块名称',
-  `url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '模块URL',
+  `role_id` int(11) NULL DEFAULT NULL COMMENT '角色ID',
+  `module_id` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '模块名称',
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色权限表' ROW_FORMAT = Dynamic;
+
+INSERT INTO `user_role`(`id`, `role_id`, `module_id`, `create_time`, `update_time`) VALUES (1, 1, '10', '2020-04-07 16:40:45', '2020-04-07 16:57:18');
+INSERT INTO `user_role`(`id`, `role_id`, `module_id`, `create_time`, `update_time`) VALUES (2, 1, '20', '2020-04-07 16:44:35', '2020-04-07 16:57:19');
+INSERT INTO `user_role`(`id`, `role_id`, `module_id`, `create_time`, `update_time`) VALUES (3, 1, '30', '2020-04-07 16:44:43', '2020-04-07 16:57:20');
+INSERT INTO `user_role`(`id`, `role_id`, `module_id`, `create_time`, `update_time`) VALUES (4, 1, '40', '2020-04-07 16:45:39', '2020-04-07 16:57:21');
+INSERT INTO `user_role`(`id`, `role_id`, `module_id`, `create_time`, `update_time`) VALUES (5, 1, '50', '2020-04-07 16:46:06', '2020-04-07 16:57:22');
+INSERT INTO `user_role`(`id`, `role_id`, `module_id`, `create_time`, `update_time`) VALUES (6, 1, '60', '2020-04-07 16:46:52', '2020-04-07 16:57:23');
+INSERT INTO `user_role`(`id`, `role_id`, `module_id`, `create_time`, `update_time`) VALUES (7, 1, '70', '2020-04-07 16:47:34', '2020-04-07 16:57:25');
+INSERT INTO `user_role`(`id`, `role_id`, `module_id`, `create_time`, `update_time`) VALUES (8, 1, '80', '2020-04-07 16:48:05', '2020-04-07 16:57:26');
+INSERT INTO `user_role`(`id`, `role_id`, `module_id`, `create_time`, `update_time`) VALUES (10, 2, '10', '2020-04-07 16:40:45', '2020-04-07 17:02:08');
+INSERT INTO `user_role`(`id`, `role_id`, `module_id`, `create_time`, `update_time`) VALUES (11, 2, '20', '2020-04-07 16:44:35', '2020-04-07 17:02:10');
+INSERT INTO `user_role`(`id`, `role_id`, `module_id`, `create_time`, `update_time`) VALUES (12, 2, '30', '2020-04-07 16:44:43', '2020-04-07 17:02:12');
+INSERT INTO `user_role`(`id`, `role_id`, `module_id`, `create_time`, `update_time`) VALUES (13, 2, '40', '2020-04-07 16:45:39', '2020-04-07 17:02:14');
+INSERT INTO `user_role`(`id`, `role_id`, `module_id`, `create_time`, `update_time`) VALUES (14, 2, '50', '2020-04-07 16:46:06', '2020-04-07 17:02:15');
+INSERT INTO `user_role`(`id`, `role_id`, `module_id`, `create_time`, `update_time`) VALUES (15, 2, '60', '2020-04-07 16:46:52', '2020-04-07 17:02:18');
+INSERT INTO `user_role`(`id`, `role_id`, `module_id`, `create_time`, `update_time`) VALUES (16, 2, '70', '2020-04-07 16:47:34', '2020-04-07 17:02:19');
+INSERT INTO `user_role`(`id`, `role_id`, `module_id`, `create_time`, `update_time`) VALUES (17, 2, '80', '2020-04-07 16:48:05', '2020-04-07 17:02:21');
+INSERT INTO `user_role`(`id`, `role_id`, `module_id`, `create_time`, `update_time`) VALUES (19, 3, '10', '2020-04-07 16:40:45', '2020-04-07 17:06:45');
+INSERT INTO `user_role`(`id`, `role_id`, `module_id`, `create_time`, `update_time`) VALUES (20, 3, '20', '2020-04-07 16:44:35', '2020-04-07 17:06:47');
+INSERT INTO `user_role`(`id`, `role_id`, `module_id`, `create_time`, `update_time`) VALUES (21, 3, '30', '2020-04-07 16:44:43', '2020-04-07 17:06:49');
+INSERT INTO `user_role`(`id`, `role_id`, `module_id`, `create_time`, `update_time`) VALUES (22, 3, '40', '2020-04-07 16:45:39', '2020-04-07 17:06:51');
+INSERT INTO `user_role`(`id`, `role_id`, `module_id`, `create_time`, `update_time`) VALUES (23, 3, '50', '2020-04-07 16:46:06', '2020-04-07 17:06:54');
+INSERT INTO `user_role`(`id`, `role_id`, `module_id`, `create_time`, `update_time`) VALUES (24, 3, '80', '2020-04-07 16:48:05', '2020-04-07 17:06:56');
+
+
+CREATE TABLE `module` (
+  `id` int(11) NOT NULL,
+  `module_name` varchar(16) DEFAULT NULL COMMENT '模块名称',
+  `url` varchar(64) DEFAULT NULL COMMENT '模块链接',
+  `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统模块表';
+
+INSERT INTO `module`(`id`, `module_name`, `url`, `create_time`, `update_time`) VALUES (10, '主页', 'home', '2020-04-07 16:40:45', '2020-04-07 16:45:44');
+INSERT INTO `module`(`id`, `module_name`, `url`, `create_time`, `update_time`) VALUES (20, '文章搜索', 'articleSearch', '2020-04-07 16:44:35', '2020-04-07 16:47:49');
+INSERT INTO `module`(`id`, `module_name`, `url`, `create_time`, `update_time`) VALUES (30, '病虫防治', 'bug', '2020-04-07 16:44:43', '2020-04-07 16:45:53');
+INSERT INTO `module`(`id`, `module_name`, `url`, `create_time`, `update_time`) VALUES (40, '栽培方法', 'plant', '2020-04-07 16:45:39', '2020-04-07 16:46:02');
+INSERT INTO `module`(`id`, `module_name`, `url`, `create_time`, `update_time`) VALUES (50, '公告', 'notice', '2020-04-07 16:46:52', '2020-04-07 16:47:11');
+INSERT INTO `module`(`id`, `module_name`, `url`, `create_time`, `update_time`) VALUES (60, '发布文章', 'publishArticle', '2020-04-07 16:47:34', '2020-04-07 16:48:00');
+INSERT INTO `module`(`id`, `module_name`, `url`, `create_time`, `update_time`) VALUES (70, '文章管理', 'articleManage', '2020-04-07 16:48:05', '2020-04-07 16:48:39');
+INSERT INTO `module`(`id`, `module_name`, `url`, `create_time`, `update_time`) VALUES (80, '个人中心', 'personCenter', '2020-04-07 16:49:02', '2020-04-07 16:49:02');
 
 SET FOREIGN_KEY_CHECKS = 1;
