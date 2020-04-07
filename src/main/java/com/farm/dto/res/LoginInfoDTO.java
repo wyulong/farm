@@ -15,6 +15,7 @@ public class LoginInfoDTO {
 
     private String token;
     private int userType;
+    private String userName;
     private String roleDesc;
 
 }

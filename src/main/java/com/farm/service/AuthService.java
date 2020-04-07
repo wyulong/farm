@@ -71,6 +71,7 @@ public class AuthService {
         LoginInfoDTO loginInfoDTO = LoginInfoDTO.builder().
                 token(token).
                 userType(user1.getType()).
+                userName(user1.getName()).
                 roleDesc(userType == null ? "未知" : userType.getDesc()).
                 build();
 
