@@ -19,6 +19,7 @@ public class BusinessSumupDTO implements Serializable {
     private Integer id;
     private Integer authorId;
     private String authorName;
+    private String title;
     private LocalDateTime time;
     private String coverImg;
     private String content;

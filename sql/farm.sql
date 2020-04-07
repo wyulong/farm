@@ -62,6 +62,7 @@ DROP TABLE IF EXISTS `business_sumup`;
 CREATE TABLE `business_sumup`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `author_id` int(11) NULL DEFAULT NULL COMMENT '作者id',
+  `title` varchar(32) DEFAULT NULL COMMENT '标题',
   `time` timestamp(0) NULL DEFAULT NULL COMMENT '下乡时间',
   `cover_img` varchar(255) DEFAULT NULL COMMENT '封面缩略图',
   `content` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '内容',

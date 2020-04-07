@@ -33,6 +33,11 @@ public class BusinessSumup implements Serializable {
     private Integer authorId;
 
     /**
+     *  公告标题
+     */
+    private String title;
+
+    /**
      * 下乡时间
      */
     private LocalDateTime time;

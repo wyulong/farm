@@ -20,6 +20,11 @@ public class BusinessSumupParamsDTO implements Serializable {
     private Integer id;
 
     /**
+     *  公告标题
+     */
+    private String title;
+
+    /**
      * 下乡时间
      */
     private String time;
