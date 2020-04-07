@@ -27,9 +27,9 @@ public class ApplyRecordService extends ServiceImpl<ApplyRecordMapper, ApplyReco
      * @param pageSize
      * @return
      */
-    public IPage<ApplyRecord> getApplyRecordPage(long currPage, long pageSize) {
+    public IPage<ApplyRecord> getApplyRecordPage(int userId, long currPage, long pageSize) {
         QueryWrapper<ApplyRecord> queryWrapper = new QueryWrapper<>();
-        queryWrapper.orderByDesc("create_time");
+        queryWrapper.eq("userId",userId).orderByDesc("create_time");
         Page<ApplyRecord> page = new Page<>(currPage, pageSize);
         return applyRecordMapper.selectPage(page, queryWrapper);
     }
