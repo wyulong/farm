@@ -6,12 +6,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.farm.constants.ArticleType;
 import com.farm.constants.Errors;
 import com.farm.dto.req.ArticleParamsDTO;
+import com.farm.dto.req.BusinessSumupParamsDTO;
 import com.farm.dto.req.RegisterDTO;
 import com.farm.dto.res.ArticleDTO;
 import com.farm.entity.Article;
 import com.farm.entity.BusinessSumup;
 import com.farm.entity.User;
 import com.farm.service.*;
+import com.farm.util.DateTimeUtil;
 import com.farm.util.Exceptions;
 import com.farm.util.MD5Util;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Optional;
 
@@ -70,8 +73,8 @@ public class AdminController {
         BeanUtils.copyProperties(articleParamsDTO,article);
         article.setAuthorId(userService.currentUser().getId());
         article.setStatus(1);
-        article.setCreateTime(LocalDateTime.now());
-
+        //数据库字段策略，修改的时候不需要更新此字段
+        //article.setCreateTime(LocalDateTime.now());
         article.setType(ArticleType.NOTICE.getCode());
 
         return articleService.saveOrUpdate(article);
@@ -118,13 +121,18 @@ public class AdminController {
 
     /**
      *  保存&修改下乡总结
-     * @param businessSumup
+     * @param businessSumupParamsDTO
      */
     @PostMapping("/sumup")
-    public void sumup(@RequestBody BusinessSumup businessSumup){
+    public Boolean sumup(@RequestBody BusinessSumupParamsDTO businessSumupParamsDTO){
+        BusinessSumup businessSumup = new BusinessSumup();
+        BeanUtils.copyProperties(businessSumupParamsDTO,businessSumup);
+        businessSumup.setTime(DateTimeUtil.formatStringToLocalDateTime(businessSumupParamsDTO.getTime(),"yyyy-MM-dd HH:mm:ss"));
         businessSumup.setAuthorId(userService.currentUser().getId());
         businessSumup.setStatus(1);
-        businessSumupService.saveOrUpdate(businessSumup);
+        //数据库字段策略，修改的时候不需要更新此字段
+        //businessSumup.setCreateTime(LocalDateTime.now());
+        return businessSumupService.saveOrUpdate(businessSumup);
     }
 
     /**
@@ -132,12 +140,13 @@ public class AdminController {
      * @param id
      */
     @DeleteMapping("/sumup/{id}")
-    public void deleteSumup(@PathVariable("id")Integer id){
+    public Boolean deleteSumup(@PathVariable("id")Integer id){
         BusinessSumup businessSumup = businessSumupService.getById(id);
         if (ObjectUtils.isEmpty(businessSumup)){
-            Exceptions.throwss("总结不存在");
+            return false;
         }else {
             businessSumup.setStatus(0);
+            return businessSumupService.saveOrUpdate(businessSumup);
         }
     }
 

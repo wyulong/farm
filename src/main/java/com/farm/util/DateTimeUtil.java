@@ -1,6 +1,8 @@
 package com.farm.util;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 /** 时间格式化工具
@@ -15,6 +17,11 @@ public class DateTimeUtil {
         }
         SimpleDateFormat df = new SimpleDateFormat(pattern);
         return df.format(date);
+    }
+
+    public static LocalDateTime formatStringToLocalDateTime(String time,String pattern){
+        DateTimeFormatter df = DateTimeFormatter.ofPattern(pattern);
+        return LocalDateTime.parse(time,df);
     }
 
 }
