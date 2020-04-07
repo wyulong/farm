@@ -134,6 +134,7 @@ CREATE TABLE `user`  (
   `type` tinyint(4) NOT NULL DEFAULT 3 COMMENT '用户类型',
   `token` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '会话信息',
   `token_expire_time` timestamp(0) NULL DEFAULT NULL COMMENT '会话过期时间',
+  `status` tinyint(4) DEFAULT NULL COMMENT '账户状态  1、有效，0、无效',
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '用户创建时间',
   `update_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE

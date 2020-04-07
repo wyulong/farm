@@ -3,6 +3,7 @@ package com.farm.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.farm.constants.CommonStatus;
 import com.farm.constants.Enums;
 import com.farm.constants.UserType;
 import com.farm.dto.res.RoleModuleDTO;
@@ -36,6 +37,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     public User currentUser() {
         User query = new User();
         query.setToken(SessionContext.getRemoteSid());
+        query.setStatus(CommonStatus.VALID.getCode());
         return userMapper.selectOne(new QueryWrapper<>(query).gt("token_expire_time",new Date()));
     }
 

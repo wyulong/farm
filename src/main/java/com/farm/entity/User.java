@@ -27,6 +27,7 @@ public class User {
     private String password;
     private Integer type;
     private String token;
+    private Integer status;
     private Date tokenExpireTime;
     private Date createTime;
     private Date updateTime;

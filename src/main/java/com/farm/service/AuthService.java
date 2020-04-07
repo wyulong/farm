@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.farm.constants.CommonConstants;
+import com.farm.constants.CommonStatus;
 import com.farm.constants.Enums;
 import com.farm.constants.UserType;
 import com.farm.dto.req.RegisterDTO;
@@ -58,6 +59,7 @@ public class AuthService {
         User query1 = new User();
         query1.setPhone(phone);
         query1.setPassword(encryptStr);
+        query1.setStatus(CommonStatus.VALID.getCode());
         User user1 = userMapper.selectOne(new QueryWrapper<>(query1));
         if (ObjectUtils.isEmpty(user1)) {
             Exceptions.throwss("密码错误");
@@ -107,6 +109,7 @@ public class AuthService {
                 phone(registerDTO.getPhone()).
                 cardId(registerDTO.getCardId()).
                 type(UserType.GENERAL_USER.getCode()).
+                status(CommonStatus.VALID.getCode()).
                 createTime(new Date()).
                 build();
 
