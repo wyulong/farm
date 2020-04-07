@@ -6,9 +6,11 @@ import com.farm.configurations.UploadConfiguration;
 import com.farm.dto.req.LoginParamsDTO;
 import com.farm.dto.req.RegisterDTO;
 import com.farm.dto.res.ArticleDTO;
+import com.farm.dto.res.BusinessSumupDTO;
 import com.farm.dto.res.LoginInfoDTO;
 import com.farm.service.ArticleService;
 import com.farm.service.AuthService;
+import com.farm.service.BusinessSumupService;
 import com.farm.util.Exceptions;
 import com.farm.util.FileUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +39,9 @@ public class CommonController {
 
     @Resource
     private UploadConfiguration uploadConfiguration;
+
+    @Resource
+    private BusinessSumupService businessSumupService;
 
     /**
      *  注册接口
@@ -87,6 +92,22 @@ public class CommonController {
     @GetMapping("/notice")
     public IPage<ArticleDTO> notice(@RequestParam("page")Long page, @RequestParam("pageSize")Long pageSize){
         return articleService.getNotice(page,pageSize);
+    }
+
+    /**
+     *  下乡总结
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    @GetMapping("/sumup")
+    public IPage<BusinessSumupDTO> listSumup(@RequestParam("page")Long page, @RequestParam("pageSize")Long pageSize){
+        return businessSumupService.listSumup(page,pageSize);
+    }
+
+    @GetMapping("/sumup-detail")
+    public BusinessSumupDTO sumupDetail(@RequestParam("id")Integer id){
+        return businessSumupService.sumupDetail(id);
     }
 
     /**
