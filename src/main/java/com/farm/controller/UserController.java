@@ -1,19 +1,28 @@
 package com.farm.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.farm.constants.ApplyStatus;
+import com.farm.constants.DateStatus;
 import com.farm.constants.Errors;
+import com.farm.dto.req.ApplyDTO;
+import com.farm.dto.req.CommentDTO;
+import com.farm.dto.req.CommentParam;
 import com.farm.entity.*;
 import com.farm.service.*;
 import com.farm.util.Exceptions;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.farm.constants.Errors.*;
 
@@ -71,30 +80,39 @@ public class UserController {
      */
     @GetMapping("/apply")
     public IPage<ApplyRecord> getApplyRecordPage(@RequestParam Integer page, @RequestParam Integer pageSize) {
-        return applyRecordService.getApplyRecordPage(page, pageSize);
+        User user = userService.currentUser();
+        return applyRecordService.getApplyRecordPage(user.getId(), page, pageSize);
     }
 
     /**
      * 增加补贴申请
      *
-     * @param applyRecord
+     * @param dto
      */
     @PostMapping("/apply")
-    public void save(@RequestBody ApplyRecord applyRecord) {
+    public void save(@RequestBody ApplyDTO dto) {
+
+        ApplyRecord applyRecord = new ApplyRecord();
+        BeanUtils.copyProperties(applyRecord,dto);
         applyRecord.setUserId(userService.currentUser().getId());
         applyRecord.setCreateTime(new Date());
         applyRecord.setUpdateTime(new Date());
+        applyRecord.setStatus(ApplyStatus.APPLY.getCode());
         applyRecordService.save(applyRecord);
     }
 
     /**
      * 修改补贴申请
      *
-     * @param applyRecord
+     * @param dto
      */
     @PutMapping("/apply")
-    public void update(@RequestBody ApplyRecord applyRecord) {
+    public void update(@RequestBody ApplyDTO dto) {
+        ApplyRecord applyRecord = new ApplyRecord();
+        BeanUtils.copyProperties(applyRecord,dto);
+        applyRecord.setUserId(userService.currentUser().getId());
         applyRecord.setUpdateTime(new Date());
+        applyRecord.setStatus(ApplyStatus.APPLY.getCode());
         applyRecordService.updateById(applyRecord);
     }
 
@@ -105,7 +123,25 @@ public class UserController {
      */
     @DeleteMapping("/apply/{id}")
     public void delete(@PathVariable Integer id) {
+        ApplyRecord applyRecord = applyRecordService.getById(id);
+        if (applyRecord == null){
+            Exceptions.throwss("补贴申请不存在");
+        }
+        //没有软删除，直接物理删除
         applyRecordService.removeById(id);
+    }
+
+    /**
+     * 收藏列表
+     *
+     * @param page 当前页
+     * @param pageSize 每页数量
+     * @return
+     */
+    @GetMapping("/collect")
+    public IPage<UserCollect> getCollectPage(@RequestParam Integer page, @RequestParam Integer pageSize) {
+        User user = userService.currentUser();
+        return collectService.getCollectPage(user.getId(), page, pageSize);
     }
 
     /**
@@ -123,6 +159,7 @@ public class UserController {
                     .userId(currentUser.getId())
                     .createTime(LocalDateTime.now())
                     .updateTime(LocalDateTime.now())
+                    .status(DateStatus.VALID.getCode())
                     .build();
             collectService.save(userCollect);
         }
@@ -135,25 +172,57 @@ public class UserController {
      */
     @DeleteMapping("/collect/{collectId}")
     public void deleteCollect(@PathVariable Integer collectId) {
-        collectService.removeById(collectId);
+        UserCollect collect = collectService.getById(collectId);
+        if (collect == null){
+            Exceptions.throwss("收藏不存在");
+        }else {
+            collect.setStatus(DateStatus.INVALID.getCode());
+            collectService.saveOrUpdate(collect);
+        }
     }
+
+    /**
+     * 获取文章评论信息
+     *
+     * @param articleId
+     */
+    @GetMapping("/comment/{articleId}")
+    public List<CommentDTO> getComment(@PathVariable Integer articleId) {
+        Integer currentUserId = userService.currentUser().getId();
+        List<Comment> comments = commentService.getByArticleId(articleId);
+        Map<Integer,String> userNameMap = userService.getNameMap();
+        List<CommentDTO> commentDTOList = comments.stream().map(comment ->
+                CommentDTO.builder().id(comment.getId())
+                        .content(comment.getContent())
+                        .createTime(comment.getCreateTime())
+                        .updateTime(comment.getUpdateTime())
+                        .userName(userNameMap.getOrDefault(comment.getUserId(), "未知用户"))
+                        .canMod(currentUserId.equals(comment.getUserId()) ? 1 : 0)
+                        .build()).collect(Collectors.toList());
+        return commentDTOList;
+    }
+
 
     /**
      * 添加评论信息 & 修改评论信息
      *
-     * @param comment
+     * @param param
      */
     @PostMapping("/comment")
-    public void addComment(@RequestBody Comment comment) {
-        if (StringUtils.isBlank(comment.getContent())) {
+    public void addComment(@RequestBody CommentParam param) {
+        if (StringUtils.isBlank(param.getContent())) {
             Exceptions.throwss("评论内容不能为空");
         }
         Comment comment1 = Comment.builder()
                 .userId(userService.currentUser().getId())
-                .content(comment.getContent())
-                .createTime(LocalDateTime.now())
+                .content(param.getContent())
                 .updateTime(LocalDateTime.now())
+                .status(DateStatus.VALID.getCode())
+                .articleId(param.getArticleId())
                 .build();
+        if (param.getId() == null){
+            comment1.setCreateTime(LocalDateTime.now());
+        }
         commentService.saveOrUpdate(comment1);
     }
 
@@ -163,6 +232,8 @@ public class UserController {
      */
     @PostMapping("/plant")
     public void savePlantInfo(@RequestBody UserPlant userPlant){
+        userPlant.setUserId(userService.currentUser().getId());
+        userPlant.setUpdateTime(LocalDateTime.now());
         userPlantService.saveOrUpdate(userPlant);
     }
 
@@ -172,6 +243,10 @@ public class UserController {
      */
     @DeleteMapping("/plant/{id}")
     public void deletePalntInfo(@PathVariable("id")Integer id){
+        UserPlant plant = userPlantService.getById(id);
+        if (plant == null){
+            Exceptions.throwss("种植信息不存在");
+        }
         userPlantService.removeById(id);
     }
 

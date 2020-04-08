@@ -19,6 +19,9 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * @Author xhua
@@ -64,5 +67,10 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 
     public List<RoleModuleDTO> getMenu(Integer type) {
         return userRoleMapper.getMenuByUserType(type);
+    }
+
+    public Map<Integer,String> getNameMap() {
+        List<User> users = userMapper.selectList(new QueryWrapper<>());
+        return users.stream().collect(Collectors.toMap(User::getId, User::getName, (b, a) -> a));
     }
 }

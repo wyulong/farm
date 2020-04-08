@@ -79,6 +79,7 @@ DROP TABLE IF EXISTS `comment`;
 CREATE TABLE `comment`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NULL DEFAULT NULL COMMENT '评论人',
+  `article_id` int(11) NULL DEFAULT NULL COMMENT '文章ID',
   `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '评论内容',
   `status` tinyint(4) NULL DEFAULT NULL COMMENT '状态 1、有效，0、无效',
   `create_time` timestamp(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '评论时间',
