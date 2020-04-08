@@ -240,6 +240,7 @@ public class UserController {
             Exceptions.throwss("评论内容不能为空");
         }
         Comment comment1 = Comment.builder()
+                .id(param.getId())
                 .userId(userService.currentUser().getId())
                 .content(param.getContent())
                 .updateTime(LocalDateTime.now())
