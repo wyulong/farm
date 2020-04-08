@@ -15,15 +15,17 @@
 	        t1.apply_reason AS applyReason,
 	        t1.content,
 	        t1.`status`,
-	        t2.`name`,
+	        t2.`name` as authName,
 	        t1.refuse_desc AS refuseDesc,
 	        t1.create_time AS createTime,
 	        t1.update_time AS updateTime
         FROM
 	        apply_record t1
 	    LEFT JOIN `user` t2 ON t1.auth_id = t2.id
-        WHERE
-	        user_id = #{userId}
+        WHERE 1=1
+        <if test="userId != 0">
+			and user_id = #{userId}
+		</if>
         ORDER BY
 	        t1.create_time DESC
     </select>

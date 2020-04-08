@@ -31,7 +31,7 @@ public class ApplyRecordService extends ServiceImpl<ApplyRecordMapper, ApplyReco
      * @param pageSize
      * @return
      */
-    public IPage<ApplyDTO> getApplyRecordPage(int userId, long currPage, long pageSize) {
+    public IPage<ApplyDTO> getApplyRecordPage(Integer userId, long currPage, long pageSize) {
         Page<ApplyDTO> page = new Page<>(currPage, pageSize);
         List<ApplyDTO> list = applyRecordMapper.listApply(page, userId);
         for (ApplyDTO applyDTO : list){

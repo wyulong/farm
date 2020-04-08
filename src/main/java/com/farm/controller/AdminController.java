@@ -1,14 +1,20 @@
 package com.farm.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.farm.constants.ApplyStatus;
 import com.farm.constants.ArticleType;
 import com.farm.constants.Errors;
 import com.farm.dto.req.ArticleParamsDTO;
 import com.farm.dto.req.BusinessSumupParamsDTO;
 import com.farm.dto.req.RegisterDTO;
+import com.farm.dto.req.ResolveApplyDTO;
+import com.farm.dto.res.ApplyDTO;
 import com.farm.dto.res.ArticleDTO;
+import com.farm.entity.ApplyRecord;
 import com.farm.entity.Article;
 import com.farm.entity.BusinessSumup;
 import com.farm.entity.User;
@@ -22,10 +28,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Optional;
+
+import static com.farm.constants.Errors.of;
 
 /**
  * 管理员接口
@@ -49,6 +55,9 @@ public class AdminController {
 
     @Autowired
     private ArticleService articleService;
+
+    @Autowired
+    private ApplyRecordService applyRecordService;
 
     /**
      * 获取公告分页数据
@@ -109,13 +118,43 @@ public class AdminController {
     }
 
     /**
+     *  申请记录
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    @GetMapping("list-apply")
+    public IPage<ApplyDTO> listApply(@RequestParam("page")Integer page, @RequestParam("pageSize")Integer pageSize){
+        return applyRecordService.getApplyRecordPage(0,page,pageSize);
+    }
+
+    /**
      * 审批申请单
      */
     @PostMapping("/apply/resolve")
-    public void resolveApplies() {
+    public Boolean resolveApplies(@RequestBody ResolveApplyDTO resolveApplyDTO) {
+
         //申请单id
         //审批状态
         //添加图片
+
+        ApplyRecord applyRecord = applyRecordService.getById(resolveApplyDTO.getApplyId());
+        if (applyRecord == null){
+            Exceptions.throwss("申请不存在");
+        }
+
+        if (resolveApplyDTO.getStatus() == ApplyStatus.REJECTED.getCode() && StringUtils.isEmpty(resolveApplyDTO.getRefuseDesc()))
+        {
+            Exceptions.throwss("请填写退回原因");
+        }
+        User currentUser = userService.currentUser();
+
+        applyRecord.setAuthId(currentUser.getId());
+        applyRecord.setContent(JSONArray.toJSON(resolveApplyDTO.getImages()).toString());
+        applyRecord.setStatus(resolveApplyDTO.getStatus());
+        applyRecord.setRefuseDesc(resolveApplyDTO.getRefuseDesc());
+
+        return applyRecordService.updateById(applyRecord);
 
     }
 
