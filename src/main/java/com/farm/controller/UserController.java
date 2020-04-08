@@ -2,6 +2,7 @@ package com.farm.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.farm.constants.ApplyStatus;
 import com.farm.constants.DateStatus;
 import com.farm.constants.Errors;
@@ -157,10 +158,14 @@ public class UserController {
      * @param articleId 文章id
      */
     @PostMapping("/collect/{articleId}")
-    public void addCollect(@PathVariable Integer articleId) {
+    public Boolean addCollect(@PathVariable Integer articleId) {
         Optional.ofNullable(articleService.getById(articleId)).orElseThrow(() -> of(NOT_FOUND));
         User currentUser = Optional.ofNullable(userService.currentUser()).orElseThrow(() -> of(INVALID_TOKEN));
-        if (!collectService.exists(currentUser.getId(), articleId)) {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("user_id",currentUser.getId());
+        queryWrapper.eq("article_id",articleId);
+        UserCollect exist = collectService.getOne(queryWrapper);
+        if (ObjectUtils.isEmpty(exist)) {
             UserCollect userCollect = UserCollect.builder()
                     .articleId(articleId)
                     .userId(currentUser.getId())
@@ -168,7 +173,14 @@ public class UserController {
                     .updateTime(LocalDateTime.now())
                     .status(DateStatus.VALID.getCode())
                     .build();
-            collectService.save(userCollect);
+            return collectService.save(userCollect);
+            //收藏过又取消
+        }else if (exist.getStatus() == DateStatus.INVALID.getCode()){
+            exist.setStatus(DateStatus.VALID.getCode());
+            return collectService.updateById(exist);
+            //已收藏
+        }else {
+            return exist.getStatus() == DateStatus.VALID.getCode();
         }
     }
 
@@ -178,13 +190,20 @@ public class UserController {
      * @param collectId 收藏id
      */
     @DeleteMapping("/collect/{collectId}")
-    public void deleteCollect(@PathVariable Integer collectId) {
-        UserCollect collect = collectService.getById(collectId);
-        if (collect == null){
+    public Boolean deleteCollect(@PathVariable Integer collectId) {
+        User currentUser = Optional.ofNullable(userService.currentUser()).orElseThrow(() -> of(INVALID_TOKEN));
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("user_id",currentUser.getId());
+        queryWrapper.eq("id",collectId);
+        UserCollect exist = collectService.getOne(queryWrapper);
+        if (exist == null){
             Exceptions.throwss("收藏不存在");
+            return false;
+        }else if (exist.getStatus() == DateStatus.VALID.getCode()){
+            exist.setStatus(DateStatus.INVALID.getCode());
+            return collectService.saveOrUpdate(exist);
         }else {
-            collect.setStatus(DateStatus.INVALID.getCode());
-            collectService.saveOrUpdate(collect);
+            return exist.getStatus() == DateStatus.INVALID.getCode();
         }
     }
 
