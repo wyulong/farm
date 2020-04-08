@@ -4,11 +4,15 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.farm.constants.ApplyStatus;
+import com.farm.constants.Enums;
+import com.farm.dto.res.ApplyDTO;
 import com.farm.entity.ApplyRecord;
 import com.farm.mapper.ApplyRecordMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @Author xhua
@@ -27,11 +31,14 @@ public class ApplyRecordService extends ServiceImpl<ApplyRecordMapper, ApplyReco
      * @param pageSize
      * @return
      */
-    public IPage<ApplyRecord> getApplyRecordPage(int userId, long currPage, long pageSize) {
-        QueryWrapper<ApplyRecord> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("userId",userId).orderByDesc("create_time");
-        Page<ApplyRecord> page = new Page<>(currPage, pageSize);
-        return applyRecordMapper.selectPage(page, queryWrapper);
+    public IPage<ApplyDTO> getApplyRecordPage(int userId, long currPage, long pageSize) {
+        Page<ApplyDTO> page = new Page<>(currPage, pageSize);
+        List<ApplyDTO> list = applyRecordMapper.listApply(page, userId);
+        for (ApplyDTO applyDTO : list){
+            ApplyStatus applyStatus = Enums.valueOf(applyDTO.getStatus(),ApplyStatus.class);
+            applyDTO.setStatusDesc(applyStatus==null?null:applyStatus.getDesc());
+        }
+        return page.setRecords(list);
     }
 
 }

@@ -1,12 +1,14 @@
 package com.farm.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.farm.constants.ApplyStatus;
 import com.farm.constants.DateStatus;
 import com.farm.constants.Errors;
-import com.farm.dto.req.ApplyDTO;
+import com.farm.dto.req.ApplyParamsDTO;
 import com.farm.dto.req.CommentDTO;
 import com.farm.dto.req.CommentParam;
+import com.farm.dto.res.ApplyDTO;
 import com.farm.entity.*;
 import com.farm.service.*;
 import com.farm.util.Exceptions;
@@ -79,7 +81,7 @@ public class UserController {
      * @return
      */
     @GetMapping("/apply")
-    public IPage<ApplyRecord> getApplyRecordPage(@RequestParam Integer page, @RequestParam Integer pageSize) {
+    public IPage<ApplyDTO> getApplyRecordPage(@RequestParam Integer page, @RequestParam Integer pageSize) {
         User user = userService.currentUser();
         return applyRecordService.getApplyRecordPage(user.getId(), page, pageSize);
     }
@@ -90,15 +92,15 @@ public class UserController {
      * @param dto
      */
     @PostMapping("/apply")
-    public void save(@RequestBody ApplyDTO dto) {
+    public Boolean save(@RequestBody ApplyParamsDTO dto) {
 
         ApplyRecord applyRecord = new ApplyRecord();
-        BeanUtils.copyProperties(applyRecord,dto);
+        BeanUtils.copyProperties(dto,applyRecord);
         applyRecord.setUserId(userService.currentUser().getId());
         applyRecord.setCreateTime(new Date());
         applyRecord.setUpdateTime(new Date());
         applyRecord.setStatus(ApplyStatus.APPLY.getCode());
-        applyRecordService.save(applyRecord);
+        return applyRecordService.save(applyRecord);
     }
 
     /**
@@ -107,13 +109,13 @@ public class UserController {
      * @param dto
      */
     @PutMapping("/apply")
-    public void update(@RequestBody ApplyDTO dto) {
+    public Boolean update(@RequestBody ApplyParamsDTO dto) {
         ApplyRecord applyRecord = new ApplyRecord();
-        BeanUtils.copyProperties(applyRecord,dto);
+        BeanUtils.copyProperties(dto,applyRecord);
         applyRecord.setUserId(userService.currentUser().getId());
         applyRecord.setUpdateTime(new Date());
         applyRecord.setStatus(ApplyStatus.APPLY.getCode());
-        applyRecordService.updateById(applyRecord);
+        return applyRecordService.updateById(applyRecord);
     }
 
     /**
@@ -122,13 +124,18 @@ public class UserController {
      * @param id 补贴申请id
      */
     @DeleteMapping("/apply/{id}")
-    public void delete(@PathVariable Integer id) {
-        ApplyRecord applyRecord = applyRecordService.getById(id);
+    public Boolean delete(@PathVariable Integer id) {
+        //只能删除用户所属的数据
+        User user = userService.currentUser();
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("user_id",user.getId());
+        queryWrapper.eq("id",id);
+        ApplyRecord applyRecord = applyRecordService.getOne(queryWrapper);
         if (applyRecord == null){
             Exceptions.throwss("补贴申请不存在");
         }
         //没有软删除，直接物理删除
-        applyRecordService.removeById(id);
+        return applyRecordService.removeById(id);
     }
 
     /**

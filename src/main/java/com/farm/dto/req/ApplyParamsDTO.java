@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 @Builder
-public class ApplyDTO {
+public class ApplyParamsDTO {
     private Integer id;
     /**
      * 用户名称
