@@ -9,9 +9,11 @@ import com.farm.constants.Errors;
 import com.farm.dto.req.ApplyParamsDTO;
 import com.farm.dto.req.CommentDTO;
 import com.farm.dto.req.CommentParam;
+import com.farm.dto.req.UserPlantParams;
 import com.farm.dto.res.ApplyDTO;
 import com.farm.entity.*;
 import com.farm.service.*;
+import com.farm.util.DateTimeUtil;
 import com.farm.util.Exceptions;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -255,13 +257,32 @@ public class UserController {
 
     /**
      *  添加&修改种植信息
-     * @param userPlant
+     * @param params
      */
     @PostMapping("/plant")
-    public void savePlantInfo(@RequestBody UserPlant userPlant){
-        userPlant.setUserId(userService.currentUser().getId());
-        userPlant.setUpdateTime(LocalDateTime.now());
-        userPlantService.saveOrUpdate(userPlant);
+    public void savePlantInfo(@RequestBody UserPlantParams params){
+        User currentUser = Optional.ofNullable(userService.currentUser()).orElseThrow(() -> of(INVALID_TOKEN));
+
+        if (params.getId()!=null){
+            QueryWrapper queryWrapper = new QueryWrapper();
+            queryWrapper.eq("id",params.getId());
+            queryWrapper.eq("user_id",currentUser.getId());
+            UserPlant userPlant = userPlantService.getOne(queryWrapper);
+            if (userPlant == null){
+                Exceptions.throwss("种植信息不存在");
+            }else {
+                BeanUtils.copyProperties(params,userPlant);
+                userPlant.setPlantTime(DateTimeUtil.formatStringToLocalDateTime(params.getPlantTime(),"yyyy-MM-dd HH:mm:ss"));
+                userPlantService.updateById(userPlant);
+            }
+        }else {
+            UserPlant userPlant = new UserPlant();
+            BeanUtils.copyProperties(params,userPlant);
+            userPlant.setPlantTime(DateTimeUtil.formatStringToLocalDateTime(params.getPlantTime(),"yyyy-MM-dd HH:mm:ss"));
+            userPlant.setUserId(userService.currentUser().getId());
+            userPlant.setUpdateTime(LocalDateTime.now());
+            userPlantService.saveOrUpdate(userPlant);
+        }
     }
 
     /**
@@ -270,7 +291,11 @@ public class UserController {
      */
     @DeleteMapping("/plant/{id}")
     public void deletePalntInfo(@PathVariable("id")Integer id){
-        UserPlant plant = userPlantService.getById(id);
+        User currentUser = Optional.ofNullable(userService.currentUser()).orElseThrow(() -> of(INVALID_TOKEN));
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("id",id);
+        queryWrapper.eq("user_id",currentUser.getId());
+        UserPlant plant = userPlantService.getOne(queryWrapper);
         if (plant == null){
             Exceptions.throwss("种植信息不存在");
         }
