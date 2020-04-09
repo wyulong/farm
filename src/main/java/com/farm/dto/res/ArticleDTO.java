@@ -53,4 +53,9 @@ public class ArticleDTO implements Serializable {
      */
     private LocalDateTime createTime;
 
+    /**
+     *  是否收藏
+     */
+    private Boolean follow;
+
 }

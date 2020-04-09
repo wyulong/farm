@@ -24,5 +24,6 @@ public class BusinessSumupDTO implements Serializable {
     private String coverImg;
     private String content;
     private String createTime;
+    private Boolean follow;
 
 }

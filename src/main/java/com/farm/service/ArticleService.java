@@ -33,10 +33,10 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
     private UserMapper userMapper;
 
 
-    public IPage<ArticleDTO> searchArticle(String content,Long page,Long pageSize) {
+    public IPage<ArticleDTO> searchArticle(Integer userId,String content,Long page,Long pageSize) {
         Page<ArticleDTO> ipage = new Page<>(page,pageSize);
 
-        List<ArticleDTO> list = articleMapper.searchArticle(ipage,content);
+        List<ArticleDTO> list = articleMapper.searchArticle(ipage,userId,content);
         //文章描述
         for (ArticleDTO articleDTO:list){
             ArticleType articleType = Enums.valueOf(articleDTO.getType(),ArticleType.class);
@@ -52,9 +52,9 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
      * @param pageSize
      * @return
      */
-    public IPage<ArticleDTO> getNotice(Long page, Long pageSize) {
+    public IPage<ArticleDTO> getNotice(Integer userId,Long page, Long pageSize) {
         Page<ArticleDTO> iPage = new Page<>(page,pageSize);
-        List<ArticleDTO> list = articleMapper.searchNotice(iPage);
+        List<ArticleDTO> list = articleMapper.getNotice(iPage,userId);
         return iPage.setRecords(list);
     }
 

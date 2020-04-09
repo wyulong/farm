@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.Optional;
 
+import static com.farm.constants.Errors.INVALID_TOKEN;
 import static com.farm.constants.Errors.of;
 
 /**
@@ -68,7 +69,8 @@ public class AdminController {
      */
     @GetMapping("/notice")
     public IPage<ArticleDTO> getNoticePage(@RequestParam("page")Long page,@RequestParam("pageSize")Long pageSize) {
-        return articleService.getNotice(page,pageSize);
+        User currentUser = Optional.ofNullable(userService.currentUser()).orElseThrow(() -> of(INVALID_TOKEN));
+        return articleService.getNotice(currentUser.getId(),page,pageSize);
     }
 
     /**

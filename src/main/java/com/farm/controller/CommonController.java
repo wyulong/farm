@@ -24,6 +24,10 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+
+import static com.farm.constants.Errors.INVALID_TOKEN;
+import static com.farm.constants.Errors.of;
 
 /**  通用接口
  * @Author xhua
@@ -91,7 +95,8 @@ public class CommonController {
      */
     @GetMapping("/article/search")
     public IPage<ArticleDTO> search(@RequestParam(value = "content",required = false)String content,@RequestParam("page") Long page, @RequestParam("pageSize") Long pageSize){
-        return articleService.searchArticle(content,page,pageSize);
+        User currentUser = Optional.ofNullable(userService.currentUser()).orElseThrow(() -> of(INVALID_TOKEN));
+        return articleService.searchArticle(currentUser.getId(),content,page,pageSize);
     }
 
     /**
@@ -102,7 +107,8 @@ public class CommonController {
      */
     @GetMapping("/notice")
     public IPage<ArticleDTO> notice(@RequestParam("page")Long page, @RequestParam("pageSize")Long pageSize){
-        return articleService.getNotice(page,pageSize);
+        User currentUser = Optional.ofNullable(userService.currentUser()).orElseThrow(() -> of(INVALID_TOKEN));
+        return articleService.getNotice(currentUser.getId(),page,pageSize);
     }
 
     /**
