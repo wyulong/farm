@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.farm.constants.DateStatus;
 import com.farm.constants.Errors;
+import com.farm.dto.req.ArticleParamsDTO;
 import com.farm.entity.Article;
 import com.farm.entity.BusinessSumup;
 import com.farm.service.ArticleService;
@@ -13,6 +14,7 @@ import com.farm.service.UserService;
 import com.farm.util.Exceptions;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,13 +48,15 @@ public class TechnologyController {
 
     /**
      * 新增文章&编辑文章
-     * @param article
+     * @param articleParamsDTO
      */
     @PostMapping("/article")
-    public void saveArticle(@RequestBody Article article){
+    public Boolean saveArticle(@RequestBody ArticleParamsDTO articleParamsDTO){
+        Article article = new Article();
+        BeanUtils.copyProperties(articleParamsDTO,article);
         article.setAuthorId(userService.currentUser().getId());
         article.setStatus(DateStatus.VALID.getCode());
-        articleService.saveOrUpdate(article);
+        return articleService.saveOrUpdate(article);
     }
 
     /**
@@ -60,13 +64,14 @@ public class TechnologyController {
      * @param id 文章id
      */
     @DeleteMapping("/article")
-    public void deleteArticle(@RequestParam Integer id){
+    public Boolean deleteArticle(@RequestParam Integer id){
         Article article = articleService.getById(id);
         if (article == null){
             Exceptions.throwss("文章不存在");
+            return false;
         }else {
             article.setStatus(DateStatus.INVALID.getCode());
-            articleService.saveOrUpdate(article);
+            return articleService.saveOrUpdate(article);
         }
     }
 
