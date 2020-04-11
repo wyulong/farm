@@ -6,6 +6,7 @@ import com.farm.constants.DateStatus;
 import com.farm.constants.Errors;
 import com.farm.dto.req.ArticleParamsDTO;
 import com.farm.dto.res.ArticleDTO;
+import com.farm.dto.res.BusinessSumupDTO;
 import com.farm.entity.Article;
 import com.farm.entity.BusinessSumup;
 import com.farm.service.ArticleService;
@@ -86,9 +87,14 @@ public class TechnologyController {
     @GetMapping("/article")
     public IPage<ArticleDTO> getArticlePage(long page, long pageSize) {
         Integer userId = userService.currentUser().getId();
-         return articleService.searchArticle(userId, null, page, pageSize);
+        //不通过内容筛选
+        return articleService.searchArticle(userId, null, page, pageSize);
     }
 
+    /**
+     * 新增、修改下乡总结
+     * @param businessSumup
+     */
     @PostMapping("/sumup")
     public void saveBusinessSumup(@RequestBody BusinessSumup businessSumup){
         if (StringUtils.isBlank(businessSumup.getContent())){
@@ -103,17 +109,34 @@ public class TechnologyController {
         sumupService.saveOrUpdate(businessSumup);
     }
 
+    /**
+     * 下乡总结分页列表
+     * @param page
+     * @param pageSize
+     * @return
+     */
     @GetMapping("/sumup")
-    public IPage<BusinessSumup> getBusinessSumup(long page, long pageSize) {
-        return sumupService.page(new Page<>(page, pageSize));
+    public IPage<BusinessSumupDTO> getBusinessSumup(long page, long pageSize) {
+        Integer userId = userService.currentUser().getId();
+        return sumupService.listSumup(userId,page,pageSize);
     }
 
+    /**
+     * 下乡总结详情
+     * @param sumupId
+     * @return
+     */
     @GetMapping("/sumup/{sumupId}")
-    public BusinessSumup getBusinessSumup(@PathVariable Integer sumupId){
-        return sumupService.getById(sumupId);
+    public BusinessSumupDTO getBusinessSumup(@PathVariable Integer sumupId){
+        BusinessSumup sumup = sumupService.getById(sumupId);
+        return sumupService.copy(sumup, userService.currentUser());
     }
 
 
+    /**
+     * 删除下乡总结
+     * @param sumupId
+     */
     @DeleteMapping("/sumup/{sumupId}")
     public void deleteSumup(@PathVariable Integer sumupId){
         BusinessSumup businessSumup = Optional.ofNullable(sumupService.getById(sumupId)).orElseThrow(() -> Errors.of(NOT_FOUND));
