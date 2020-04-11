@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.farm.constants.DateStatus;
 import com.farm.constants.Errors;
 import com.farm.dto.req.ArticleParamsDTO;
+import com.farm.dto.res.ArticleDTO;
 import com.farm.entity.Article;
 import com.farm.entity.BusinessSumup;
 import com.farm.service.ArticleService;
@@ -18,6 +19,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.*;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -73,6 +75,18 @@ public class TechnologyController {
             article.setStatus(DateStatus.INVALID.getCode());
             return articleService.saveOrUpdate(article);
         }
+    }
+
+    /**
+     * 文章分页列表
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    @GetMapping("/article")
+    public IPage<ArticleDTO> getArticlePage(long page, long pageSize) {
+        Integer userId = userService.currentUser().getId();
+         return articleService.searchArticle(userId, null, page, pageSize);
     }
 
     @PostMapping("/sumup")
