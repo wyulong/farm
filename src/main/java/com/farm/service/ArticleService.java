@@ -80,4 +80,15 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
 
         return articleDTO;
     }
+
+    public IPage<ArticleDTO> searchArticleByType(long page, long pageSize, Integer type) {
+        Page<ArticleDTO> ipage = new Page<>(page,pageSize);
+        List<ArticleDTO> list = articleMapper.searchArticleByType(ipage,type);
+        //文章描述
+        for (ArticleDTO articleDTO:list){
+            ArticleType articleType = Enums.valueOf(articleDTO.getType(),ArticleType.class);
+            articleDTO.setTypeDesc(articleType == null ? null:articleType.getDesc());
+        };
+        return ipage.setRecords(list);
+    }
 }

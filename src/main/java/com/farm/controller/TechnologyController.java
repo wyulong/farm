@@ -85,10 +85,8 @@ public class TechnologyController {
      * @return
      */
     @GetMapping("/article")
-    public IPage<ArticleDTO> getArticlePage(long page, long pageSize) {
-        Integer userId = userService.currentUser().getId();
-        //不通过内容筛选
-        return articleService.searchArticle(userId, null, page, pageSize);
+    public IPage<ArticleDTO> getArticlePage(Integer type,long page, long pageSize) {
+        return articleService.searchArticleByType(page,pageSize,type);
     }
 
     /**
