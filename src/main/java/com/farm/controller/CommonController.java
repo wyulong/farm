@@ -14,6 +14,8 @@ import com.farm.dto.res.BusinessSumupDTO;
 import com.farm.dto.res.LoginInfoDTO;
 import com.farm.entity.Article;
 import com.farm.entity.User;
+import com.farm.entity.UserCollect;
+import com.farm.mapper.UserCollectMapper;
 import com.farm.service.ArticleService;
 import com.farm.service.AuthService;
 import com.farm.service.BusinessSumupService;
@@ -56,6 +58,9 @@ public class CommonController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private UserCollectMapper userCollectMapper;
 
     /**
      *  注册接口
@@ -149,6 +154,7 @@ public class CommonController {
      */
     @GetMapping("article-detail")
     public ArticleDTO getArticleDetail(@RequestParam("id")Integer id){
+        User currentUser = Optional.ofNullable(userService.currentUser()).orElseThrow(() -> of(INVALID_TOKEN));
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("status",DateStatus.VALID.getCode());
         queryWrapper.in("type",2,3);
@@ -160,6 +166,18 @@ public class CommonController {
         articleDTO.setAuthorName(user.getName());
         ArticleType articleType = Enums.valueOf(article.getType(),ArticleType.class);
         articleDTO.setTypeDesc(articleType == null?"未知":articleType.getDesc());
+        //用户是否收藏
+        UserCollect userCollect = new UserCollect();
+        userCollect.setUserId(currentUser.getId());
+        userCollect.setArticleId(id);
+        userCollect.setStatus(DateStatus.VALID.getCode());
+        UserCollect exist = userCollectMapper.selectOne(new QueryWrapper<>(userCollect));
+        if (exist != null){
+            articleDTO.setFollow(true);
+        }else {
+            articleDTO.setFollow(false);
+        }
+
         return articleDTO;
     }
 
