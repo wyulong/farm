@@ -1,14 +1,19 @@
 package com.farm.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.farm.annotation.OpenApi;
 import com.farm.configurations.UploadConfiguration;
+import com.farm.constants.ArticleType;
+import com.farm.constants.DateStatus;
+import com.farm.constants.Enums;
 import com.farm.dto.req.LoginParamsDTO;
 import com.farm.dto.req.RegisterDTO;
 import com.farm.dto.res.ArticleDTO;
 import com.farm.dto.res.BusinessSumupDTO;
 import com.farm.dto.res.LoginInfoDTO;
+import com.farm.entity.Article;
 import com.farm.entity.User;
 import com.farm.service.ArticleService;
 import com.farm.service.AuthService;
@@ -17,6 +22,7 @@ import com.farm.service.UserService;
 import com.farm.util.Exceptions;
 import com.farm.util.FileUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -97,6 +103,48 @@ public class CommonController {
     public IPage<ArticleDTO> search(@RequestParam(value = "content",required = false)String content,@RequestParam("page") Long page, @RequestParam("pageSize") Long pageSize){
         User currentUser = Optional.ofNullable(userService.currentUser()).orElseThrow(() -> of(INVALID_TOKEN));
         return articleService.searchArticle(currentUser.getId(),content,page,pageSize);
+    }
+
+    /**
+     * 文章分类查询
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    @GetMapping("/article")
+    public IPage<ArticleDTO> getArticlePage(Integer type,long page, long pageSize) {
+        return articleService.searchArticleByType(page,pageSize,type);
+    }
+
+    /**
+     *  获取文章详情
+     * @param id
+     * @return
+     */
+    @GetMapping("article-detail")
+    public ArticleDTO getArticleDetail(@RequestParam("id")Integer id){
+        QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("status",DateStatus.VALID.getCode());
+        queryWrapper.in("type",2,3);
+        queryWrapper.eq("id",id);
+        Article article = articleService.getOne(queryWrapper);
+        ArticleDTO articleDTO = new ArticleDTO();
+        BeanUtils.copyProperties(article,articleDTO);
+        User user = userService.getById(article.getAuthorId());
+        articleDTO.setAuthorName(user.getName());
+        ArticleType articleType = Enums.valueOf(article.getType(),ArticleType.class);
+        articleDTO.setTypeDesc(articleType == null?"未知":articleType.getDesc());
+        return articleDTO;
+    }
+
+    /**
+     * 获取公告详细信息
+     * @param id 公告id
+     * @return
+     */
+    @GetMapping("/notice-detail")
+    public ArticleDTO getNotice(@RequestParam("id") Integer id) {
+        return articleService.getNoticeDetailById(id);
     }
 
     /**
