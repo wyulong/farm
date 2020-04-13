@@ -23,5 +23,7 @@ public interface ArticleMapper extends BaseMapper<Article> {
 
     List<ArticleDTO> getNotice(IPage<ArticleDTO> iPage, @Param("userId")Integer userId);
 
+    List<ArticleDTO> getNoticePage(IPage<ArticleDTO> iPage);
+
     List<ArticleDTO> searchArticleByType(Page<ArticleDTO> ipage, @Param("type")Integer type);
 }

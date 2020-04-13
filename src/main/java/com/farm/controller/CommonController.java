@@ -5,11 +5,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.farm.annotation.OpenApi;
 import com.farm.configurations.UploadConfiguration;
-import com.farm.constants.ArticleType;
-import com.farm.constants.DateStatus;
-import com.farm.constants.Enums;
+import com.farm.constants.*;
 import com.farm.dto.req.LoginParamsDTO;
 import com.farm.dto.req.RegisterDTO;
+import com.farm.dto.req.UpdatePasswordDTO;
 import com.farm.dto.res.ArticleDTO;
 import com.farm.dto.res.BusinessSumupDTO;
 import com.farm.dto.res.LoginInfoDTO;
@@ -21,16 +20,14 @@ import com.farm.service.BusinessSumupService;
 import com.farm.service.UserService;
 import com.farm.util.Exceptions;
 import com.farm.util.FileUtil;
+import com.farm.util.MD5Util;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.farm.constants.Errors.INVALID_TOKEN;
 import static com.farm.constants.Errors.of;
@@ -79,6 +76,35 @@ public class CommonController {
     @OpenApi
     public LoginInfoDTO login(@RequestBody LoginParamsDTO loginParamsDTO){
         return authService.verifyPhoneAndPassword(loginParamsDTO.getPhone(), loginParamsDTO.getPassword());
+    }
+
+    /**
+     *  退出登录
+     * @return
+     */
+    @PostMapping("logout")
+    public Boolean logout(){
+        User currentUser = Optional.ofNullable(userService.currentUser()).orElseThrow(() -> of(INVALID_TOKEN));
+        currentUser.setTokenExpireTime(new Date(System.currentTimeMillis() - CommonConstants.TOKEN_EXPIRE_TIME));
+        return userService.updateById(currentUser);
+    }
+
+    /**
+     *  修改密码
+     * @param updatePasswordDTO
+     * @return
+     */
+    @PostMapping("update-password")
+    public Boolean updatePassword(@RequestBody UpdatePasswordDTO updatePasswordDTO){
+        User currentUser = Optional.ofNullable(userService.currentUser()).orElseThrow(() -> of(INVALID_TOKEN));
+        String old = MD5Util.encrypt(updatePasswordDTO.getOldPassword());
+        if (!currentUser.getPassword().equals(old)){
+            Exceptions.throwss("旧密码错误");
+            return false;
+        }else {
+            currentUser.setPassword(MD5Util.encrypt(updatePasswordDTO.getNewPassword()));
+            return userService.updateById(currentUser);
+        }
     }
 
     /**
@@ -155,8 +181,7 @@ public class CommonController {
      */
     @GetMapping("/notice")
     public IPage<ArticleDTO> notice(@RequestParam("page")Long page, @RequestParam("pageSize")Long pageSize){
-        User currentUser = Optional.ofNullable(userService.currentUser()).orElseThrow(() -> of(INVALID_TOKEN));
-        return articleService.getNotice(currentUser.getId(),page,pageSize);
+        return articleService.getNotice(page,pageSize);
     }
 
     /**

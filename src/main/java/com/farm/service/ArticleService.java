@@ -58,6 +58,12 @@ public class ArticleService extends ServiceImpl<ArticleMapper, Article> {
         return iPage.setRecords(list);
     }
 
+    public IPage<ArticleDTO> getNotice(Long page, Long pageSize){
+        Page<ArticleDTO> iPage = new Page<>(page,pageSize);
+        List<ArticleDTO> list = articleMapper.getNoticePage(iPage);
+        return iPage.setRecords(list);
+    }
+
     /**
      * 获取公告详情
      * @param id
