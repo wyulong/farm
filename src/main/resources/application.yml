@@ -5,6 +5,8 @@ server:
 spring:
   application:
     name: farm-manage-system
+  mvc:
+    dispatch-options-request: true
   http:
     encoding:
       charset: UTF-8

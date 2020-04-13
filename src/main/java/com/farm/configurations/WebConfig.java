@@ -67,18 +67,18 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/static/**").addResourceLocations("file:///" +uploadConfiguration.getFilePath());
     }
 
-    /**
-     *  跨域请求
-     * @param registry
-     */
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedHeaders("*")
-                .allowedOrigins("http://localhost:8080")
-                .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE")
-                .maxAge(3600)
-                .allowCredentials(true);
-    }
+//    /**
+//     *  跨域请求
+//     * @param registry
+//     */
+//    @Override
+//    public void addCorsMappings(CorsRegistry registry) {
+//        registry.addMapping("/**")
+//                .allowedHeaders("*")
+//                .allowedOrigins("http://localhost:8080")
+//                .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE")
+//                .maxAge(3600)
+//                .allowCredentials(true);
+//    }
 
 }
