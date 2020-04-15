@@ -28,7 +28,7 @@ public class OperateRecordParams implements Serializable {
     /**
      * 操作描述
      */
-    private String describe;
+    private String description;
 
     /**
      * 用量

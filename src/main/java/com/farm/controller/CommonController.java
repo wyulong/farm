@@ -269,7 +269,7 @@ public class CommonController {
         User query = new User();
         query.setToken(token);
         User user = userMapper.selectOne(new QueryWrapper<>(query));
-        return user == null;
+        return user != null;
     }
 
 }

@@ -319,7 +319,7 @@ public class UserController {
      * @param params
      */
     @PostMapping("/operate")
-    public void saveOperateInfo(@RequestBody OperateRecordParams params){
+    public Boolean saveOperateInfo(@RequestBody OperateRecordParams params){
         User currentUser = Optional.ofNullable(userService.currentUser()).orElseThrow(() -> of(INVALID_TOKEN));
         if (params.getId()!=null){
             QueryWrapper queryWrapper = new QueryWrapper();
@@ -328,18 +328,17 @@ public class UserController {
             OperationRecord operationRecord = operationRecordService.getOne(queryWrapper);
             if (operationRecord == null){
                 Exceptions.throwss("操作信息不存在");
-            }else {
-                BeanUtils.copyProperties(params,operationRecord);
-                operationRecord.setOperationTime(params.getOperationTime());
-                operationRecordService.updateById(operationRecord);
             }
+            BeanUtils.copyProperties(params,operationRecord);
+            operationRecord.setOperationTime(params.getOperationTime());
+            return operationRecordService.updateById(operationRecord);
         }else {
             OperationRecord operationRecord = new OperationRecord();
             BeanUtils.copyProperties(params,operationRecord);
             operationRecord.setOperationTime(params.getOperationTime());
             operationRecord.setUserId(currentUser.getId());
             operationRecord.setUpdateTime(LocalDateTime.now());
-            operationRecordService.saveOrUpdate(operationRecord);
+            return operationRecordService.saveOrUpdate(operationRecord);
         }
     }
 
@@ -348,7 +347,7 @@ public class UserController {
      * @param id
      */
     @DeleteMapping("/operate/{id}")
-    public void deleteOperationRecord(@PathVariable("id")Integer id){
+    public Boolean deleteOperationRecord(@PathVariable("id")Integer id){
         User currentUser = Optional.ofNullable(userService.currentUser()).orElseThrow(() -> of(INVALID_TOKEN));
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("id",id);
@@ -357,7 +356,7 @@ public class UserController {
         if (record == null){
             Exceptions.throwss("操作信息不存在");
         }
-        operationRecordService.removeById(id);
+        return operationRecordService.removeById(id);
     }
 
     /**
