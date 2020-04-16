@@ -135,8 +135,7 @@ public class CommonController {
      */
     @GetMapping("/article/search")
     public IPage<ArticleDTO> search(@RequestParam(value = "content",required = false)String content,@RequestParam("page") Long page, @RequestParam("pageSize") Long pageSize){
-        User currentUser = Optional.ofNullable(userService.currentUser()).orElseThrow(() -> of(INVALID_TOKEN));
-        return articleService.searchArticle(currentUser.getId(),content,page,pageSize);
+        return articleService.searchArticle(content,page,pageSize);
     }
 
     /**
