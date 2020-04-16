@@ -156,10 +156,10 @@ public class CommonController {
      */
     @GetMapping("article-detail")
     public ArticleDTO getArticleDetail(@RequestParam("id")Integer id){
-        User currentUser = Optional.ofNullable(userService.currentUser()).orElseThrow(() -> of(INVALID_TOKEN));
+        //User currentUser = Optional.ofNullable(userService.currentUser()).orElseThrow(() -> of(INVALID_TOKEN));
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("status",DateStatus.VALID.getCode());
-        queryWrapper.in("type",2,3);
+        //queryWrapper.in("type",2,3);
         queryWrapper.eq("id",id);
         Article article = articleService.getOne(queryWrapper);
         ArticleDTO articleDTO = new ArticleDTO();
@@ -169,16 +169,16 @@ public class CommonController {
         ArticleType articleType = Enums.valueOf(article.getType(),ArticleType.class);
         articleDTO.setTypeDesc(articleType == null?"未知":articleType.getDesc());
         //用户是否收藏
-        UserCollect userCollect = new UserCollect();
-        userCollect.setUserId(currentUser.getId());
-        userCollect.setArticleId(id);
-        userCollect.setStatus(DateStatus.VALID.getCode());
-        UserCollect exist = userCollectService.getOne(new QueryWrapper<>(userCollect));
-        if (exist != null){
-            articleDTO.setFollow(true);
-        }else {
-            articleDTO.setFollow(false);
-        }
+//        UserCollect userCollect = new UserCollect();
+        //userCollect.setUserId(currentUser.getId());
+//        userCollect.setArticleId(id);
+//        userCollect.setStatus(DateStatus.VALID.getCode());
+//        UserCollect exist = userCollectService.getOne(new QueryWrapper<>(userCollect));
+//        if (exist != null){
+//            articleDTO.setFollow(true);
+//        }else {
+//            articleDTO.setFollow(false);
+//        }
 
         return articleDTO;
     }
